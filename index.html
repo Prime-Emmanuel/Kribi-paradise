@@ -48,6 +48,7 @@
                         'bill-slide': 'billSlide 0.6s ease-out',
                         'pulse-slow': 'pulse 3s ease-in-out infinite',
                         'logo-spin': 'logoSpin 2s ease-in-out',
+                        'countdown-pulse': 'countdownPulse 1s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -102,6 +103,10 @@
                             '0%': { transform: 'rotate(0deg)', opacity: '0' },
                             '70%': { transform: 'rotate(360deg)', opacity: '1' },
                             '100%': { transform: 'rotate(360deg)', opacity: '1' },
+                        },
+                        countdownPulse: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' },
                         }
                     }
                 }
@@ -366,6 +371,88 @@
             width: 100%;
         }
         
+        /* Maintenance Modal */
+        .maintenance-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.6s ease;
+        }
+        
+        .maintenance-modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .maintenance-content {
+            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+            border: 2px solid #CBA135;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            transform: scale(0.9);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .maintenance-modal.active .maintenance-content {
+            transform: scale(1);
+        }
+        
+        .maintenance-header {
+            background: linear-gradient(135deg, #CBA135 0%, #A67C00 100%);
+            padding: 30px;
+            text-align: center;
+            color: black;
+        }
+        
+        .maintenance-body {
+            padding: 40px 30px;
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .countdown-item {
+            background: rgba(203, 161, 53, 0.1);
+            border: 2px solid rgba(203, 161, 53, 0.3);
+            border-radius: 15px;
+            padding: 20px 15px;
+            min-width: 80px;
+            text-align: center;
+            animation: countdownPulse 2s ease-in-out infinite;
+        }
+        
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #CBA135;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
         /* Image Overlay */
         .image-overlay {
             position: absolute;
@@ -561,6 +648,90 @@
     </style>
 </head>
 <body class="bg-dark-bg text-white font-body">
+    <!-- Maintenance Modal -->
+    <div id="maintenanceModal" class="maintenance-modal active">
+        <div class="maintenance-content">
+            <div class="maintenance-header">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-full border-2 border-black flex items-center justify-center overflow-hidden bg-black">
+                        <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" 
+                             alt="Kribi Paradise Logo" 
+                             class="w-full h-full object-contain p-2">
+                    </div>
+                </div>
+                <h2 class="text-2xl font-display font-bold">KRIBI PARADISE</h2>
+                <p class="text-sm opacity-80">Agence de Tourisme et de Loisirs</p>
+            </div>
+            <div class="maintenance-body">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-accent/20 rounded-full mb-4">
+                        <i class="fas fa-tools text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold mb-3">Maintenance en cours</h3>
+                    <p class="text-gray-300 mb-2">
+                        Nous sommes désolés pour la gêne occasionnée. Notre site web est actuellement en cours de maintenance pour améliorer votre expérience.
+                    </p>
+                    <p class="text-gray-300">
+                        Le site sera disponible à partir de:
+                    </p>
+                </div>
+                
+                <!-- Countdown Timer -->
+                <div class="countdown-container">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="countdown-hours">00</div>
+                        <div class="countdown-label">Heures</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="countdown-minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="countdown-seconds">00</div>
+                        <div class="countdown-label">Secondes</div>
+                    </div>
+                </div>
+                
+                <div class="text-center mb-8">
+                    <div class="inline-block bg-accent/20 text-accent px-4 py-2 rounded-full text-sm font-bold mb-2">
+                        <i class="fas fa-clock mr-2"></i>
+                        Estimation: <span id="estimated-time">21:00</span> aujourd'hui
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start bg-black/50 rounded-xl p-4">
+                        <i class="fas fa-info-circle text-accent mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-bold mb-1">Services toujours disponibles</h4>
+                            <p class="text-sm text-gray-300">
+                                Vous pouvez toujours nous contacter par WhatsApp pour vos réservations et informations.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start bg-black/50 rounded-xl p-4">
+                        <i class="fas fa-whatsapp text-green-500 mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-bold mb-1">Contact WhatsApp</h4>
+                            <p class="text-sm text-gray-300">
+                                +237 694 795 189 - Réponses garanties dans les plus brefs délais
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="continueToSite" class="w-full mt-8 bg-accent hover:bg-light-gold text-black py-3 rounded-full font-bold transition-all duration-300 shadow-lg">
+                    <i class="fas fa-eye mr-2"></i>Continuer vers le site (version limitée)
+                </button>
+                
+                <p class="text-center text-xs text-gray-500 mt-4">
+                    Certaines fonctionnalités peuvent être temporairement indisponibles
+                </p>
+            </div>
+        </div>
+    </div>
+    
     <!-- Professional Loading Screen -->
     <div id="loader" class="loader">
         <div class="loader-logo-container">
@@ -2021,13 +2192,13 @@
                             <div class="text-xl font-display font-bold">KRIBI<span class="gold-gradient">PARADISE</span></div>
                             <div class="text-xs text-gray-500">AGENCE DE TOURISME ET DE LOISIRS</div>
                         </div>
-                    </div>
-                    <div class="text-gray-500 text-sm">
-                        <p class="mb-1">Whatsapp: 694 795 189</p>
-                        <p class="mb-1">Tél: 671 026 530</p>
-                        <p class="mb-1">Email: kribiparadise@gmail.com</p>
-                        <p>Site web: www.kribiparadise.com</p>
-                    </div>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    <p class="mb-1">Whatsapp: 694 795 189</p>
+                    <p class="mb-1">Tél: 671 026 530</p>
+                    <p class="mb-1">Email: kribiparadise@gmail.com</p>
+                    <p>Site web: www.kribiparadise.com</p>
+                </div>
                 </div>
                 
                 <div class="text-center lg:text-right">
@@ -2054,8 +2225,89 @@
     
     <!-- JavaScript -->
     <script>
-        // Initialize loader
+        // Maintenance Modal and Countdown
+        const maintenanceModal = document.getElementById('maintenanceModal');
+        const continueToSiteBtn = document.getElementById('continueToSite');
+        const estimatedTimeElement = document.getElementById('estimated-time');
+        const countdownHours = document.getElementById('countdown-hours');
+        const countdownMinutes = document.getElementById('countdown-minutes');
+        const countdownSeconds = document.getElementById('countdown-seconds');
+        
+        // Set maintenance end time (today at 9 PM)
+        const now = new Date();
+        const maintenanceEndTime = new Date();
+        maintenanceEndTime.setHours(21, 0, 0, 0); // 9:00 PM
+        
+        // If it's already past 9 PM, set it for tomorrow
+        if (now > maintenanceEndTime) {
+            maintenanceEndTime.setDate(maintenanceEndTime.getDate() + 1);
+        }
+        
+        // Format the estimated time for display
+        const options = { hour: '2-digit', minute: '2-digit' };
+        estimatedTimeElement.textContent = maintenanceEndTime.toLocaleTimeString('fr-FR', options);
+        
+        // Countdown function
+        function updateCountdown() {
+            const now = new Date();
+            const timeRemaining = maintenanceEndTime - now;
+            
+            if (timeRemaining <= 0) {
+                // Maintenance is over
+                countdownHours.textContent = '00';
+                countdownMinutes.textContent = '00';
+                countdownSeconds.textContent = '00';
+                
+                // Update maintenance modal message
+                document.querySelector('.maintenance-body h3').textContent = 'Maintenance Terminée!';
+                document.querySelector('.maintenance-body p').innerHTML = `
+                    Le site est maintenant disponible!<br>
+                    Découvrez notre nouvelle version améliorée.
+                `;
+                
+                // Change button text
+                continueToSiteBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i>Explorer le nouveau site';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    hideMaintenanceModal();
+                }, 5000);
+                
+                return;
+            }
+            
+            const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            countdownHours.textContent = hours.toString().padStart(2, '0');
+            countdownMinutes.textContent = minutes.toString().padStart(2, '0');
+            countdownSeconds.textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Initialize countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Hide maintenance modal function
+        function hideMaintenanceModal() {
+            maintenanceModal.classList.remove('active');
+            setTimeout(() => {
+                maintenanceModal.classList.add('hidden');
+            }, 600);
+        }
+        
+        // Continue to site button
+        continueToSiteBtn.addEventListener('click', hideMaintenanceModal);
+        
+        // Initialize loader (after maintenance modal if user continues)
         window.addEventListener('load', function() {
+            // Show loader after maintenance modal is hidden or immediately if user continues
+            if (maintenanceModal.classList.contains('active')) {
+                // Wait for user to click continue
+                return;
+            }
+            
             setTimeout(function() {
                 const loader = document.getElementById('loader');
                 loader.classList.add('hidden');
@@ -2422,7 +2674,6 @@
         });
         
         window.addEventListener('scroll', animateOnScroll);
-        window.addEventListener('load', animateOnScroll);
         
         // Set minimum date for arrival to today
         const today = new Date().toISOString().split('T')[0];
