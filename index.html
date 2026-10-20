@@ -1,2016 +1,1112 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kribi Paradise | Excellence en Tourisme & Loisirs</title>
-    
-    <!-- Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom Tailwind Configuration -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#0A0A0A',
-                        'secondary': '#FFFFFF',
-                        'accent': '#D4AF37',
-                        'dark-bg': '#111111',
-                        'card-bg': '#1A1A1A',
-                    },
-                    fontFamily: {
-                        'display': ['Playfair Display', 'serif'],
-                        'body': ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'slide-up': 'slideUp 0.5s ease-out',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    },
-                    backgroundImage: {
-                        'gradient-gold': 'linear-gradient(135deg, #D4AF37 0%, #F4E4B5 50%, #B8941F 100%)',
-                    },
-                }
-            }
-        }
-    </script>
-    
-    <!-- Custom CSS -->
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            background: #0A0A0A;
-            color: #FFFFFF;
-            overflow-x: hidden;
-        }
-        
-        h1, h2, h3, h4, h5 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-        }
-        
-        /* Gold Gradient Text */
-        .gold-gradient {
-            background: linear-gradient(135deg, #D4AF37 0%, #F4E4B5 50%, #B8941F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Premium Cards */
-        .service-card {
-            background: linear-gradient(145deg, #1A1A1A 0%, #111111 100%);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .service-card-image {
-            height: 200px;
-            width: 100%;
-            overflow: hidden;
-        }
-        
-        .service-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        
-        .service-card:hover .service-card-image img {
-            transform: scale(1.05);
-        }
-        
-        .service-card-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.3) 50%, rgba(10, 10, 10, 0.9) 100%);
-            opacity: 0.6;
-        }
-        
-        .price-badge {
-            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
-            color: #0A0A0A;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-        
-        /* Package Cards */
-        .package-card {
-            background: linear-gradient(145deg, #1A1A1A 0%, #111111 100%);
-            border: 2px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .package-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #D4AF37, #F4E4B5, #D4AF37);
-        }
-        
-        /* Form Styles */
-        .form-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #D4AF37;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-        }
-        
-        .form-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.5em;
-        }
-        
-        /* Loading Screen */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0A0A0A;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        
-        #loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .loader-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4AF37 0%, #F4E4B5 50%, #B8941F 100%);
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .loader-logo-inner {
-            width: 94px;
-            height: 94px;
-            border-radius: 50%;
-            background: #0A0A0A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Mobile Menu */
-        #mobileMenu {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: #0A0A0A;
-            z-index: 999;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        #mobileMenu.active {
-            transform: translateX(0);
-        }
-        
-        /* WhatsApp Button */
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: #25D366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-            transition: transform 0.3s ease;
-        }
-        
-        .whatsapp-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        /* Section Padding */
-        .section-padding {
-            padding: 80px 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .section-padding {
-                padding: 60px 20px;
-            }
-            
-            h1 {
-                font-size: 2.5rem !important;
-            }
-            
-            h2 {
-                font-size: 2rem !important;
-            }
-        }
-        
-        /* Hero Background */
-        .hero-bg {
-            background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.9)), 
-                        url('IMG-20251212-WA0031.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        /* Service Icons */
-        .service-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        /* Custom Checkbox */
-        .custom-checkbox {
-            position: relative;
-            padding-left: 35px;
-            cursor: pointer;
-        }
-        
-        .custom-checkbox input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 25px;
-            width: 25px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 5px;
-        }
-        
-        .custom-checkbox input:checked ~ .checkmark {
-            background-color: #D4AF37;
-        }
-        
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        
-        .custom-checkbox input:checked ~ .checkmark:after {
-            display: block;
-        }
-        
-        .custom-checkbox .checkmark:after {
-            left: 9px;
-            top: 5px;
-            width: 7px;
-            height: 12px;
-            border: solid #0A0A0A;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        
-        /* Custom Radio */
-        .custom-radio {
-            position: relative;
-            padding-left: 35px;
-            cursor: pointer;
-            display: block;
-            margin-bottom: 12px;
-        }
-        
-        .custom-radio input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .radio-mark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 25px;
-            width: 25px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50%;
-        }
-        
-        .custom-radio input:checked ~ .radio-mark {
-            background-color: #D4AF37;
-        }
-        
-        .radio-mark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        
-        .custom-radio input:checked ~ .radio-mark:after {
-            display: block;
-        }
-        
-        .custom-radio .radio-mark:after {
-            top: 8px;
-            left: 8px;
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #0A0A0A;
-        }
-        
-        /* Selected Service Item */
-        .selected-item {
-            background: rgba(212, 175, 55, 0.1);
-            border-left: 3px solid #D4AF37;
-        }
-        
-        /* Scroll to Top Button */
-        .scroll-top {
-            position: fixed;
-            bottom: 90px;
-            right: 24px;
-            width: 50px;
-            height: 50px;
-            background: #D4AF37;
-            color: #0A0A0A;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            z-index: 100;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-        
-        .scroll-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Category Badges */
-        .category-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #D4AF37;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kribi Paradise | Tourisme & Loisirs d'Exception</title>
+<meta name="description" content="Kribi Paradise — Agence de tourisme et loisirs premium à Kribi, Cameroun. Hébergements, activités nautiques, packages tout compris.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#0A0A0A',
+        paper: '#FFFFFF',
+        mist: '#F7F7F5',
+        line: '#EAEAEA',
+        muted: '#6B6B6B',
+      },
+      fontFamily: {
+        display: ['Playfair Display', 'serif'],
+        body: ['Inter', 'sans-serif'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:90px; }
+  body {
+    background:#FFFFFF; color:#0A0A0A;
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:600; letter-spacing:-0.02em; }
+
+  .container-x { max-width:1200px; margin:0 auto; padding:0 24px; }
+  .section { padding:120px 0; }
+  @media(max-width:768px){ .section{ padding:72px 0; } }
+
+  /* Nav */
+  .nav {
+    position:fixed; top:0; width:100%; z-index:1000;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+  }
+  .nav-link {
+    font-size:0.875rem; font-weight:500; color:#6B6B6B;
+    transition:color .2s ease; position:relative;
+  }
+  .nav-link:hover, .nav-link.active { color:#0A0A0A; }
+  .nav-link.active::after {
+    content:''; position:absolute; left:0; right:0; bottom:-6px;
+    height:2px; background:#0A0A0A; border-radius:2px;
+  }
+
+  /* Buttons */
+  .btn-ink {
+    background:#0A0A0A; color:#fff; font-weight:600; font-size:0.9rem;
+    padding:14px 28px; border-radius:999px; display:inline-flex; align-items:center;
+    gap:8px; transition:all .25s ease; border:1px solid #0A0A0A;
+  }
+  .btn-ink:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,0,0,0.18); }
+  .btn-ghost {
+    background:transparent; color:#0A0A0A; font-weight:600; font-size:0.9rem;
+    padding:14px 28px; border-radius:999px; display:inline-flex; align-items:center;
+    gap:8px; border:1px solid #D4D4D4; transition:all .25s ease;
+  }
+  .btn-ghost:hover { border-color:#0A0A0A; background:#F7F7F5; }
+
+  /* Cards */
+  .card {
+    background:#fff; border:1px solid #EAEAEA; border-radius:20px;
+    overflow:hidden; transition:all .3s ease;
+  }
+  .card:hover { border-color:#D4D4D4; box-shadow:0 12px 32px rgba(0,0,0,0.06); transform:translateY(-2px); }
+  .card-img { height:220px; width:100%; overflow:hidden; }
+  .card-img img { width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+  .card:hover .card-img img { transform:scale(1.04); }
+
+  .price-tag {
+    display:inline-block; background:#F7F7F5; color:#0A0A0A;
+    font-weight:600; font-size:0.8rem; padding:6px 14px; border-radius:999px;
+    border:1px solid #EAEAEA;
+  }
+  .badge-label {
+    display:inline-block; background:#0A0A0A; color:#fff;
+    font-size:0.7rem; font-weight:600; letter-spacing:0.08em;
+    text-transform:uppercase; padding:6px 14px; border-radius:999px;
+  }
+
+  /* Form */
+  .field {
+    width:100%; background:#fff; border:1px solid #E2E2E2; border-radius:12px;
+    padding:13px 16px; font-size:0.9rem; color:#0A0A0A; transition:all .2s ease;
+    font-family:'Inter',sans-serif;
+  }
+  .field:focus { outline:none; border-color:#0A0A0A; box-shadow:0 0 0 3px rgba(10,10,10,0.06); }
+  .field::placeholder { color:#A0A0A0; }
+  select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B6B6B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; background-size:18px; }
+
+  /* Choice cards (packages & services) */
+  .choice {
+    border:1px solid #E2E2E2; border-radius:16px; padding:16px 18px;
+    cursor:pointer; transition:all .2s ease; display:flex; align-items:center; gap:14px;
+    background:#fff;
+  }
+  .choice:hover { border-color:#C4C4C4; background:#FCFCFB; }
+  .choice.selected { border-color:#0A0A0A; background:#0A0A0A; color:#fff; }
+  .choice.selected .choice-price { color:#BDBDBD; }
+  .choice-mark {
+    width:22px; height:22px; border-radius:50%; border:2px solid #D4D4D4;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    transition:all .2s ease;
+  }
+  .choice.selected .choice-mark { border-color:#fff; background:#fff; }
+  .choice-mark i { font-size:10px; color:#0A0A0A; opacity:0; transition:opacity .2s; }
+  .choice.selected .choice-mark i { opacity:1; }
+  .choice-price { font-size:0.8rem; color:#6B6B6B; }
+
+  /* Summary */
+  .summary-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 0; border-bottom:1px solid #F0F0F0;
+  }
+  .summary-row:last-child { border-bottom:none; }
+  .remove-btn { color:#B0B0B0; transition:color .2s; }
+  .remove-btn:hover { color:#DC2626; }
+
+  /* Loader */
+  #loader {
+    position:fixed; inset:0; background:#fff; z-index:9999;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  #loader.hidden { opacity:0; visibility:hidden; }
+  .loader-spinner {
+    width:36px; height:36px; border:2px solid #EAEAEA; border-top-color:#0A0A0A;
+    border-radius:50%; animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Mobile menu */
+  #mobileMenu {
+    position:fixed; inset:0; background:#fff; z-index:999;
+    transform:translateX(100%); transition:transform .3s ease;
+  }
+  #mobileMenu.active { transform:translateX(0); }
+
+  /* Floating */
+  .wa-float {
+    position:fixed; bottom:24px; right:24px; width:58px; height:58px;
+    background:#25D366; color:#fff; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-size:26px; z-index:100;
+    box-shadow:0 8px 24px rgba(37,211,102,0.32); transition:transform .25s ease;
+  }
+  .wa-float:hover { transform:scale(1.08); }
+  .scroll-top {
+    position:fixed; bottom:96px; right:24px; width:44px; height:44px;
+    background:#0A0A0A; color:#fff; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-size:16px; z-index:100;
+    cursor:pointer; opacity:0; transform:translateY(16px); transition:all .3s ease;
+  }
+  .scroll-top.visible { opacity:1; transform:translateY(0); }
+
+  /* Hero */
+  .hero {
+    min-height:100vh; display:flex; align-items:center; padding-top:80px;
+    background:
+      linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.94)),
+      url('IMG-20251212-WA0031.jpg');
+    background-size:cover; background-position:center;
+  }
+
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+
+  @media(prefers-reduced-motion:reduce) {
+    * { animation:none !important; transition:none !important; }
+    .reveal { opacity:1; transform:none; }
+  }
+
+  .divider-dot { width:4px; height:4px; border-radius:50%; background:#D4D4D4; display:inline-block; }
+</style>
 </head>
+
 <body>
-    <!-- Loading Screen -->
-    <div id="loader">
-        <div class="text-center">
-            <div class="loader-logo mx-auto mb-6">
-                <div class="loader-logo-inner">
-                    <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Kribi Paradise Logo" class="w-16 h-16 rounded-full">
-                </div>
-            </div>
-            <div class="text-accent font-bold text-xl mb-2">Kribi Paradise</div>
-            <div class="text-gray-400">Chargement de l'expérience...</div>
+
+<!-- Loader -->
+<div id="loader"><div class="loader-spinner"></div></div>
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/237694795189" target="_blank" class="wa-float" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Scroll top -->
+<div class="scroll-top" id="scrollTop" aria-label="Haut de page"><i class="fas fa-chevron-up"></i></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container-x">
+    <div class="flex justify-between items-center h-[72px]">
+      <a href="#hero" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-line">
+          <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Kribi Paradise" class="w-full h-full object-contain">
         </div>
+        <div class="leading-tight">
+          <div class="text-[15px] font-semibold tracking-tight">KRIBI PARADISE</div>
+          <div class="text-[10px] text-muted tracking-[0.15em] uppercase">Tourisme & Loisirs</div>
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#hebergement" class="nav-link">Hébergement</a>
+        <a href="#loisirs" class="nav-link">Loisirs</a>
+        <a href="#tourisme" class="nav-link">Tourisme</a>
+        <a href="#packages" class="nav-link">Packages</a>
+        <a href="#reservation" class="btn-ink !py-2.5 !px-5 !text-[13px]">Réserver</a>
+      </div>
+
+      <button id="menuToggle" class="md:hidden text-ink text-xl" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
-    
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/237694795189" target="_blank" class="whatsapp-btn">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    
-    <!-- Scroll to Top Button -->
-    <div class="scroll-top" id="scrollTop">
-        <i class="fas fa-chevron-up"></i>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobileMenu">
+  <div class="p-6 h-full flex flex-col">
+    <div class="flex justify-between items-center mb-12">
+      <div class="text-[15px] font-semibold">KRIBI PARADISE</div>
+      <button id="closeMenu" class="text-ink text-xl" aria-label="Fermer"><i class="fas fa-times"></i></button>
     </div>
-    
-    <!-- Navigation -->
-    <nav class="py-4">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <a href="#hero" class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-black border border-accent/30">
-                        <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Logo" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <div class="text-lg font-bold">KRIBI<span class="gold-gradient">PARADISE</span></div>
-                        <div class="text-xs text-gray-400">Tourisme & Loisirs</div>
-                    </div>
-                </a>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#hebergement" class="text-gray-300 hover:text-accent text-sm font-medium">Hébergement</a>
-                    <a href="#loisirs" class="text-gray-300 hover:text-accent text-sm font-medium">Loisirs</a>
-                    <a href="#tourisme" class="text-gray-300 hover:text-accent text-sm font-medium">Tourisme</a>
-                    <a href="#packages" class="text-gray-300 hover:text-accent text-sm font-medium">Packages</a>
-                    <a href="#reservation" class="bg-accent text-black px-6 py-2 rounded-full text-sm font-bold hover:bg-yellow-500">Réservation</a>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <button id="menuToggle" class="md:hidden text-gray-300">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- Mobile Menu -->
-    <div id="mobileMenu">
-        <div class="p-6 h-full">
-            <div class="flex justify-between items-center mb-12">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-black border border-accent">
-                        <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Logo">
-                    </div>
-                    <div class="text-lg font-bold">KRIBI<span class="gold-gradient">PARADISE</span></div>
-                </div>
-                <button id="closeMenu" class="text-gray-400">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-6">
-                <a href="#hebergement" class="block text-2xl font-bold text-gray-300 hover:text-accent py-3">Hébergement</a>
-                <a href="#loisirs" class="block text-2xl font-bold text-gray-300 hover:text-accent py-3">Loisirs</a>
-                <a href="#tourisme" class="block text-2xl font-bold text-gray-300 hover:text-accent py-3">Tourisme</a>
-                <a href="#packages" class="block text-2xl font-bold text-gray-300 hover:text-accent py-3">Packages</a>
-                <a href="#reservation" class="block text-2xl font-bold bg-accent text-black py-3 rounded text-center mt-8">Réservation</a>
-            </div>
-            
-            <div class="absolute bottom-8 left-6 right-6">
-                <div class="text-gray-500 text-sm">
-                    <p class="mb-2"><i class="fas fa-phone mr-2 text-accent"></i>694 795 189 / 671 026 530</p>
-                    <p><i class="fas fa-envelope mr-2 text-accent"></i>kribiparadise@gmail.com</p>
-                </div>
-            </div>
-        </div>
+    <div class="space-y-2">
+      <a href="#hebergement" class="block text-2xl font-display py-3 border-b border-line">Hébergement</a>
+      <a href="#loisirs" class="block text-2xl font-display py-3 border-b border-line">Loisirs</a>
+      <a href="#tourisme" class="block text-2xl font-display py-3 border-b border-line">Tourisme</a>
+      <a href="#packages" class="block text-2xl font-display py-3 border-b border-line">Packages</a>
+      <a href="#reservation" class="btn-ink justify-center mt-6">Réserver maintenant</a>
     </div>
-    
-    <!-- Hero Section -->
-    <section id="hero" class="hero-bg min-h-screen flex items-center">
-        <div class="container mx-auto px-4">
-            <div class="max-w-3xl animate-fade-in">
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-                    Bienvenue à <span class="gold-gradient">Kribi Paradise</span>
-                </h1>
-                <p class="text-xl text-gray-300 mb-10">
-                    Votre agence de tourisme et de loisirs d'excellence à Kribi. Aventures palpitantes, détente absolue.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#reservation" class="bg-accent hover:bg-yellow-500 text-black px-8 py-4 rounded-full font-bold text-lg">
-                        <i class="fas fa-calendar-check mr-2"></i>Réserver Maintenant
-                    </a>
-                    <a href="#packages" class="border-2 border-accent hover:bg-accent/10 text-accent px-8 py-4 rounded-full font-bold text-lg">
-                        <i class="fas fa-gift mr-2"></i>Voir nos Packages
-                    </a>
-                </div>
-                
-                <!-- Stats -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-accent mb-2">50+</div>
-                        <div class="text-sm text-gray-400">Hébergements</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-accent mb-2">10+</div>
-                        <div class="text-sm text-gray-400">Activités</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-accent mb-2">24/7</div>
-                        <div class="text-sm text-gray-400">Assistance</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-accent mb-2">100%</div>
-                        <div class="text-sm text-gray-400">Satisfaction</div>
-                    </div>
-                </div>
-            </div>
+    <div class="mt-auto text-sm text-muted space-y-2 pt-8">
+      <p><i class="fas fa-phone mr-2"></i>694 795 189 / 671 026 530</p>
+      <p><i class="fas fa-envelope mr-2"></i>kribiparadise@gmail.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="container-x">
+    <div class="max-w-3xl">
+      <span class="badge-label mb-6 inline-block">Kribi · Cameroun</span>
+      <h1 class="text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
+        L'excellence du tourisme<br>à <span class="italic">Kribi</span>.
+      </h1>
+      <p class="text-lg md:text-xl text-muted max-w-xl mb-10 leading-relaxed">
+        Hébergements d'exception, activités nautiques et packages tout compris.
+        Une expérience pensée dans les moindres détails.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#reservation" class="btn-ink"><i class="fas fa-calendar-check"></i> Réserver maintenant</a>
+        <a href="#packages" class="btn-ghost"><i class="fas fa-gift"></i> Voir les packages</a>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-10 border-t border-line max-w-2xl">
+        <div><div class="text-3xl font-display mb-1">50+</div><div class="text-xs text-muted uppercase tracking-wider">Hébergements</div></div>
+        <div><div class="text-3xl font-display mb-1">10+</div><div class="text-xs text-muted uppercase tracking-wider">Activités</div></div>
+        <div><div class="text-3xl font-display mb-1">24/7</div><div class="text-xs text-muted uppercase tracking-wider">Assistance</div></div>
+        <div><div class="text-3xl font-display mb-1">100%</div><div class="text-xs text-muted uppercase tracking-wider">Satisfaction</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HÉBERGEMENT -->
+<section id="hebergement" class="section bg-mist">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Hébergement</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Suites & Villas</h2>
+      <p class="text-muted text-lg leading-relaxed">Une sélection d'hébergements premium pour un séjour inoubliable à Kribi.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Standard -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80" alt="Chambre Standard">
+          <span class="price-tag absolute top-4 right-4">35 000 FCFA / nuit</span>
         </div>
-    </section>
-    
-    <!-- Hébergement Section -->
-    <section id="hebergement" class="section-padding bg-dark-bg">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">HÉBERGEMENT DE LUXE</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Nos <span class="gold-gradient">Suites & Villas</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Choisissez parmi notre sélection d'hébergements premium à Kribi
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Chambre Standard -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Chambre Standard">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">35.000 FCFA/nuit</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Chambre Standard</h3>
-                        <p class="text-gray-400 mb-6">
-                            Confort optimal pour un séjour agréable à Kribi
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-gray-400">
-                                <i class="fas fa-user-friends mr-1"></i> Jusqu'à 2 personnes
-                            </div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold"
-                                    data-service="Chambre Standard"
-                                    data-price="35000"
-                                    data-type="hebergement"
-                                    data-category="Hébergement">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Chambre Prestige -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.1s">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Chambre Prestige">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">45.000 FCFA/nuit</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Chambre Prestige</h3>
-                        <p class="text-gray-400 mb-6">
-                            Élégance et confort supérieur avec vue exceptionnelle
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-gray-400">
-                                <i class="fas fa-user-friends mr-1"></i> Jusqu'à 2 personnes
-                            </div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold"
-                                    data-service="Chambre Prestige"
-                                    data-price="45000"
-                                    data-type="hebergement"
-                                    data-category="Hébergement">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Villa 4 Chambres -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.2s">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Villa 4 Chambres">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">200.000 FCFA/nuit</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Villa 4 Chambres</h3>
-                        <p class="text-gray-400 mb-6">
-                            Villa privée avec jardin tropical et service exclusif
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-gray-400">
-                                <i class="fas fa-user-friends mr-1"></i> Jusqu'à 8 personnes
-                            </div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold"
-                                    data-service="Villa 4 Chambres"
-                                    data-price="200000"
-                                    data-type="hebergement"
-                                    data-category="Hébergement">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- More Accommodation Options -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                <div class="service-card p-6">
-                    <div class="service-icon mx-auto mb-4">
-                        <i class="fas fa-star text-accent text-2xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2 text-center">Chambre VIP</h4>
-                    <div class="text-accent font-bold text-center mb-3">55.000 FCFA</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                            data-service="Chambre VIP"
-                            data-price="55000"
-                            data-type="hebergement"
-                            data-category="Hébergement">
-                        Ajouter
-                    </button>
-                </div>
-                
-                <div class="service-card p-6">
-                    <div class="service-icon mx-auto mb-4">
-                        <i class="fas fa-home text-accent text-2xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2 text-center">Appartement 2 Ch.</h4>
-                    <div class="text-accent font-bold text-center mb-3">65.000-95.000 FCFA</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                            data-service="Appartement 2 Chambres"
-                            data-price="80000"
-                            data-type="hebergement"
-                            data-category="Hébergement">
-                        Ajouter
-                    </button>
-                </div>
-                
-                <div class="service-card p-6">
-                    <div class="service-icon mx-auto mb-4">
-                        <i class="fas fa-building text-accent text-2xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2 text-center">Villa 5 Chambres</h4>
-                    <div class="text-accent font-bold text-center mb-3">250.000 FCFA</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                            data-service="Villa 5 Chambres"
-                            data-price="250000"
-                            data-type="hebergement"
-                            data-category="Hébergement">
-                        Ajouter
-                    </button>
-                </div>
-                
-                <div class="service-card p-6">
-                    <div class="service-icon mx-auto mb-4">
-                        <i class="fas fa-hotel text-accent text-2xl"></i>
-                    </div>
-                    <h4 class="text-lg font-bold mb-2 text-center">Villa 6 Chambres</h4>
-                    <div class="text-accent font-bold text-center mb-3">300.000 FCFA</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                            data-service="Villa 6 Chambres"
-                            data-price="300000"
-                            data-type="hebergement"
-                            data-category="Hébergement">
-                        Ajouter
-                    </button>
-                </div>
-            </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Chambre Standard</h3>
+          <p class="text-muted text-sm mb-5 leading-relaxed">Confort optimal pour un séjour agréable à Kribi.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-muted"><i class="fas fa-user-friends mr-1"></i> 2 personnes</span>
+            <button class="add-service btn-ink !py-2 !px-5 !text-xs" data-service="Chambre Standard" data-price="35000">Ajouter</button>
+          </div>
         </div>
-    </section>
-    
-    <!-- Loisirs Section -->
-    <section id="loisirs" class="section-padding bg-primary">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">ACTIVITÉS DE LOISIRS</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Aventures <span class="gold-gradient">Passionnantes</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Découvrez nos activités nautiques et terrestres exclusives
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Jet Ski -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Jet Ski">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">À partir de 60.000 FCFA</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Jet Ski</h3>
-                        <p class="text-gray-400 mb-6">
-                            Sensations fortes garanties sur les vagues de l'océan
-                        </p>
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">30 minutes</span>
-                                <span class="font-bold text-accent">60.000 FCFA</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">1 heure</span>
-                                <span class="font-bold text-accent">100.000 FCFA</span>
-                            </div>
-                        </div>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold"
-                                data-service="Jet Ski (1h)"
-                                data-price="100000"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter à la réservation
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Quads -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.1s">
-                    <div class="service-card-image relative">
-                        <img src="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" alt="Quads">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">À partir de 15.000 FCFA</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Quads</h3>
-                        <p class="text-gray-400 mb-6">
-                            Parcours aventure à travers les pistes de la forêt tropicale
-                        </p>
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">30 minutes</span>
-                                <span class="font-bold text-accent">15.000 FCFA</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">1 heure</span>
-                                <span class="font-bold text-accent">30.000 FCFA</span>
-                            </div>
-                        </div>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold"
-                                data-service="Quads (1h)"
-                                data-price="30000"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter à la réservation
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Bateau de Plaisance -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.2s">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Bateau de Plaisance">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">À partir de 80.000 FCFA</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3">Bateau de Plaisance</h3>
-                        <p class="text-gray-400 mb-6">
-                            Découvrez les criques isolées et les îles environnantes
-                        </p>
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Couple (1h)</span>
-                                <span class="font-bold text-accent">80.000 FCFA</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">VIP (1h)</span>
-                                <span class="font-bold text-accent">300.000 FCFA</span>
-                            </div>
-                        </div>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold"
-                                data-service="Bateau de Plaisance (Standard)"
-                                data-price="100000"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter à la réservation
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Additional Activities with Images -->
-            <div class="grid md:grid-cols-3 gap-8 mt-8">
-                <!-- Balade à Cheval -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="kribi paradise.jpg" alt="Balade à Cheval">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">10.000 FCFA/heure</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Balade à Cheval</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Détente et découverte de la nature à cheval le long des plages
-                        </p>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                                data-service="Balade à Cheval (1h)"
-                                data-price="10000"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Kayak -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" alt="Kayak">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">20.000 FCFA/heure</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Kayak</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Exploration des criques et des eaux calmes en kayak
-                        </p>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                                data-service="Kayak (1h)"
-                                data-price="20000"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Hammam & Jacuzzi -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Hammam & Jacuzzi">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 right-4">
-                            <span class="price-badge">Sur demande</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Hammam & Jacuzzi</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Détente absolue dans notre espace bien-être et relaxation
-                        </p>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                                data-service="Hammam & Jacuzzi"
-                                data-price="0"
-                                data-type="loisir"
-                                data-category="Loisir">
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-            </div>
+      </article>
+
+      <!-- Prestige -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80" alt="Chambre Prestige">
+          <span class="price-tag absolute top-4 right-4">45 000 FCFA / nuit</span>
         </div>
-    </section>
-    
-    <!-- Tourisme Section -->
-    <section id="tourisme" class="section-padding bg-dark-bg">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">DÉCOUVERTES TOURISTIQUES</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Explorez <span class="gold-gradient">Kribi</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Découvrez les merveilles naturelles et culturelles de la région
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Chutes de la Lobé -->
-                <div class="service-card animate-slide-up">
-                    <div class="service-card-image relative">
-                        <img src="https://camhebergement.com/img/2023-04-22.jpg" alt="Chutes de la Lobé">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-bold">
-                                ★ Incontournable
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Chutes de la Lobé</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Les seules chutes d'eau au monde qui se jettent directement dans l'océan.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <div class="text-accent font-bold">2.500 FCFA/pers</div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded text-sm font-bold"
-                                    data-service="Chutes de la Lobé"
-                                    data-price="2500"
-                                    data-type="tourisme"
-                                    data-category="Tourisme">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Campement Pygmées -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.1s">
-                    <div class="service-card-image relative">
-                        <img src="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" alt="Campement des Pygmées">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-bold">
-                                ★ Culturel
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Campement Pygmées</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Rencontre authentique avec la communauté Baka.
-                        </p>
-                        <div class="space-y-2 mb-4">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Personne</span>
-                                <span class="font-bold text-accent">7.500 FCFA</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Couple</span>
-                                <span class="font-bold text-accent">20.000 FCFA</span>
-                            </div>
-                        </div>
-                        <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-2 rounded text-sm font-bold"
-                                data-service="Campement Pygmées (Personne)"
-                                data-price="7500"
-                                data-type="tourisme"
-                                data-category="Tourisme">
-                            Ajouter
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Port en Eau Profonde -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.2s">
-                    <div class="service-card-image relative">
-                        <img src="https://pictures.latribune.fr/cdn-cgi/image/format=auto,width=1200,height=675/691/1090691.png" alt="Port de Kribi">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-bold">
-                                ★ Industriel
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Port en Eau Profonde</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Visite du port de Kribi, l'un des plus importants d'Afrique centrale.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <div class="text-accent font-bold">5.000 FCFA/pers</div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded text-sm font-bold"
-                                    data-service="Port en Eau Profonde"
-                                    data-price="5000"
-                                    data-type="tourisme"
-                                    data-category="Tourisme">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Plages -->
-                <div class="service-card animate-slide-up" style="animation-delay: 0.3s">
-                    <div class="service-card-image relative">
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Plages de Kribi">
-                        <div class="service-card-overlay"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-bold">
-                                ★ Plages
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">Plages Grand Batanga</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-                            Découverte des plus belles plages de sable blanc de la région.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <div class="text-accent font-bold">6.000 FCFA/pers</div>
-                            <button class="add-to-reservation bg-accent hover:bg-yellow-500 text-black px-4 py-2 rounded text-sm font-bold"
-                                    data-service="Plages Grand Batanga & Londji"
-                                    data-price="6000"
-                                    data-type="tourisme"
-                                    data-category="Tourisme">
-                                Ajouter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Chambre Prestige</h3>
+          <p class="text-muted text-sm mb-5 leading-relaxed">Élégance et confort supérieur avec vue exceptionnelle.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-muted"><i class="fas fa-user-friends mr-1"></i> 2 personnes</span>
+            <button class="add-service btn-ink !py-2 !px-5 !text-xs" data-service="Chambre Prestige" data-price="45000">Ajouter</button>
+          </div>
         </div>
-    </section>
-    
-    <!-- Véhicule Section -->
-    <section class="section-padding bg-primary">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">LOCATION DE VÉHICULES</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Mobilité <span class="gold-gradient">Confort</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Des véhicules confortables pour vos déplacements à Kribi
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                <!-- Véhicule Standard -->
-                <div class="service-card p-8 text-center">
-                    <div class="service-icon mx-auto mb-6">
-                        <i class="fas fa-car text-accent text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Véhicule Standard</h3>
-                    <div class="text-3xl font-bold text-accent mb-2">35.000 FCFA</div>
-                    <div class="text-gray-400 text-sm mb-6">/24 heures</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold"
-                            data-service="Véhicule Standard (24h)"
-                            data-price="35000"
-                            data-type="vehicule"
-                            data-category="Transport">
-                        Ajouter à la réservation
-                    </button>
-                </div>
-                
-                <!-- Véhicule Prestige -->
-                <div class="service-card p-8 text-center">
-                    <div class="service-icon mx-auto mb-6">
-                        <i class="fas fa-car-side text-accent text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4">Véhicule Prestige</h3>
-                    <div class="text-3xl font-bold text-accent mb-2">65.000 FCFA</div>
-                    <div class="text-gray-400 text-sm mb-6">/24 heures</div>
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold"
-                            data-service="Véhicule Prestige (24h)"
-                            data-price="65000"
-                            data-type="vehicule"
-                            data-category="Transport">
-                        Ajouter à la réservation
-                    </button>
-                </div>
-            </div>
+      </article>
+
+      <!-- Villa 4 -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80" alt="Villa 4 chambres">
+          <span class="price-tag absolute top-4 right-4">200 000 FCFA / nuit</span>
         </div>
-    </section>
-    
-    <!-- Packages Section -->
-    <section id="packages" class="section-padding bg-dark-bg">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">FORFAITS COUPLE</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Packages <span class="gold-gradient">Tout Compris</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Des expériences complètes spécialement conçues pour les couples
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Package Standard -->
-                <div class="package-card p-8">
-                    <div class="text-center mb-8">
-                        <div class="bg-accent/20 text-accent px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">
-                            ★ ÉCONOMIQUE
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">PACKAGE STANDARD</h3>
-                        <div class="text-3xl font-bold text-accent mb-2">150.000 FCFA</div>
-                        <p class="text-gray-400 text-sm">Les essentiels pour une belle aventure</p>
-                    </div>
-                    
-                    <div class="space-y-4 mb-8">
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Studio standard</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Visite des chutes de la Lobé</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Balade à cheval (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Moto Quad en bordure de mer (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Kayak 🛶 (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Transport durant toutes les activités</span>
-                        </div>
-                    </div>
-                    
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold text-lg"
-                            data-service="PACKAGE STANDARD"
-                            data-price="150000"
-                            data-type="package"
-                            data-category="Package">
-                        <i class="fas fa-star mr-2"></i>Choisir ce Package
-                    </button>
-                </div>
-                
-                <!-- Package Prestige -->
-                <div class="package-card p-8">
-                    <div class="text-center mb-8">
-                        <div class="bg-accent/20 text-accent px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">
-                            ★ POPULAIRE
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">PACKAGE PRESTIGE</h3>
-                        <div class="text-3xl font-bold text-accent mb-2">200.000 FCFA</div>
-                        <p class="text-gray-400 text-sm">Confort premium et aventures mémorables</p>
-                    </div>
-                    
-                    <div class="space-y-4 mb-8">
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Studio prestige avec piscine</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Balade à cheval (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Visite des chutes de la Lobé</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Bateau de plaisance ⛴ (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Moto Quad en bordure de mer (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Kayak 🛶 (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Transport durant toutes les activités</span>
-                        </div>
-                    </div>
-                    
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold text-lg"
-                            data-service="PACKAGE PRESTIGE"
-                            data-price="200000"
-                            data-type="package"
-                            data-category="Package">
-                        <i class="fas fa-gem mr-2"></i>Choisir ce Package
-                    </button>
-                </div>
-                
-                <!-- Package VIP -->
-                <div class="package-card p-8">
-                    <div class="text-center mb-8">
-                        <div class="bg-accent/20 text-accent px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">
-                            ★ RECOMMANDÉ
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">PACKAGE VIP</h3>
-                        <div class="text-3xl font-bold text-accent mb-2">250.000 FCFA</div>
-                        <p class="text-gray-400 text-sm">L'expérience ultime de luxe et d'aventure</p>
-                    </div>
-                    
-                    <div class="space-y-4 mb-8">
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Chambre de luxe et haut standing avec piscine</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Bateau de plaisance ⛴ (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Moto Quad en bordure de mer (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Jet-ski (30 minutes)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Visite des chutes de la Lobé</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Balade à cheval (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Kayak 🛶 (1 heure)</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>Transport durant toutes les activités</span>
-                        </div>
-                         <div class="flex items-start">
-                            <i class="fas fa-check text-accent mt-1 mr-3"></i>
-                            <span>FlyWave (Nouvelle activité)</span>
-                        </div>
-                    </div>
-                    
-                    <button class="add-to-reservation w-full bg-accent hover:bg-yellow-500 text-black py-3 rounded-full font-bold text-lg"
-                            data-service="PACKAGE VIP"
-                            data-price="250000"
-                            data-type="package"
-                            data-category="Package">
-                        <i class="fas fa-crown mr-2"></i>Choisir ce Package
-                    </button>
-                </div>
-            </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Villa 4 Chambres</h3>
+          <p class="text-muted text-sm mb-5 leading-relaxed">Villa privée avec jardin tropical et service exclusif.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-muted"><i class="fas fa-user-friends mr-1"></i> 8 personnes</span>
+            <button class="add-service btn-ink !py-2 !px-5 !text-xs" data-service="Villa 4 Chambres" data-price="200000">Ajouter</button>
+          </div>
         </div>
-    </section>
-    
-    <!-- Complete Reservation Form -->
-    <section id="reservation" class="section-padding bg-primary">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block mb-4">
-                    <span class="text-accent text-sm font-bold tracking-widest uppercase">RÉSERVATION COMPLÈTE</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    Créez Votre <span class="gold-gradient">Séjour Sur Mesure</span>
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Sélectionnez les services qui composent votre séjour idéal à Kribi
-                </p>
-            </div>
-            
-            <div class="max-w-6xl mx-auto">
-                <!-- Selected Services Summary - UPDATED -->
-                <div class="bg-card-bg rounded-2xl p-6 mb-8 border border-accent/20">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-accent">Votre Sélection</h3>
-                        <div class="text-sm text-gray-400">
-                            <span id="serviceCount">0</span> service(s) sélectionné(s)
-                        </div>
-                    </div>
-                    
-                    <div id="selectedServices" class="mb-6">
-                        <div class="text-center py-8">
-                            <i class="fas fa-shopping-cart text-gray-700 text-4xl mb-4"></i>
-                            <p class="text-gray-400">Aucun service sélectionné pour le moment</p>
-                            <p class="text-gray-500 text-sm mt-2">Cliquez sur "Ajouter" sur les services ci-dessous</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Organized by Category -->
-                    <div id="servicesByCategory" class="hidden space-y-4">
-                        <!-- Categories will be inserted here by JavaScript -->
-                    </div>
-                    
-                    <div class="flex justify-between items-center pt-4 border-t border-gray-800">
-                        <div class="text-lg font-bold">Total estimé:</div>
-                        <div id="totalPrice" class="text-2xl font-bold text-accent">0 FCFA</div>
-                    </div>
-                </div>
-                
-                <!-- Reservation Form -->
-                <form id="completeReservationForm" class="bg-card-bg rounded-2xl p-8">
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <!-- Left Column: Services Selection -->
-                        <div>
-                            <h3 class="text-xl font-bold mb-6 text-accent">Sélection des Services</h3>
-                            
-                            <!-- Accommodation -->
-                            <div class="mb-8">
-                                <h4 class="font-bold mb-4 flex items-center">
-                                    <i class="fas fa-bed text-accent mr-2"></i> Hébergement
-                                </h4>
-                                <div class="space-y-3">
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="hebergement" value="chambre-standard" data-price="35000" data-service="Chambre Standard" data-category="Hébergement">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Chambre Standard - 35.000 FCFA/nuit</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="hebergement" value="chambre-prestige" data-price="45000" data-service="Chambre Prestige" data-category="Hébergement">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Chambre Prestige - 45.000 FCFA/nuit</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="hebergement" value="chambre-vip" data-price="55000" data-service="Chambre VIP" data-category="Hébergement">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Chambre VIP - 55.000 FCFA/nuit</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="hebergement" value="villa-4" data-price="200000" data-service="Villa 4 Chambres" data-category="Hébergement">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Villa 4 Chambres - 200.000 FCFA/nuit</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <!-- Activities -->
-                            <div class="mb-8">
-                                <h4 class="font-bold mb-4 flex items-center">
-                                    <i class="fas fa-ship text-accent mr-2"></i> Activités
-                                </h4>
-                                <div class="space-y-3">
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="activites" value="jet-ski" data-price="100000" data-service="Jet Ski (1h)" data-category="Loisir">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Jet Ski (1h) - 100.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="activites" value="quads" data-price="30000" data-service="Quads (1h)" data-category="Loisir">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Quads (1h) - 30.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="activites" value="bateau" data-price="100000" data-service="Bateau de Plaisance" data-category="Loisir">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Bateau de Plaisance - 100.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-checkbox block">
-                                        <input type="checkbox" name="activites" value="cheval" data-price="10000" data-service="Balade à Cheval (1h)" data-category="Loisir">
-                                        <span class="checkmark"></span>
-                                        <span class="ml-2">Balade à Cheval (1h) - 10.000 FCFA</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Right Column: Personal Info & Packages -->
-                        <div>
-                            <!-- Packages -->
-                            <div class="mb-8">
-                                <h4 class="font-bold mb-4 flex items-center">
-                                    <i class="fas fa-gift text-accent mr-2"></i> Packages Tout Compris
-                                </h4>
-                                <div class="space-y-3">
-                                    <label class="custom-radio block">
-                                        <input type="radio" name="package" value="standard" data-price="150000" data-service="PACKAGE STANDARD" data-category="Package" class="mr-2 package-radio">
-                                        <span class="font-medium">PACKAGE STANDARD - 150.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-radio block">
-                                        <input type="radio" name="package" value="prestige" data-price="200000" data-service="PACKAGE PRESTIGE" data-category="Package" class="mr-2 package-radio">
-                                        <span class="font-medium">PACKAGE PRESTIGE - 200.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-radio block">
-                                        <input type="radio" name="package" value="vip" data-price="250000" data-service="PACKAGE VIP" data-category="Package" class="mr-2 package-radio">
-                                        <span class="font-medium">PACKAGE VIP - 250.000 FCFA</span>
-                                    </label>
-                                    <label class="custom-radio block">
-                                        <input type="radio" name="package" value="aucun" checked class="mr-2 no-package-radio">
-                                        <span class="font-medium">Aucun package (choisir services individuellement)</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <!-- Personal Information -->
-                            <h3 class="text-xl font-bold mb-6 text-accent">Informations Personnelles</h3>
-                            
-                            <div class="space-y-6">
-                                <div>
-                                    <label class="block text-gray-300 mb-2">Nom complet *</label>
-                                    <input type="text" required name="nom" class="form-input w-full">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-300 mb-2">Email *</label>
-                                    <input type="email" required name="email" class="form-input w-full">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-300 mb-2">Téléphone *</label>
-                                    <input type="tel" required name="telephone" class="form-input w-full">
-                                </div>
-                                
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-gray-300 mb-2">Date d'arrivée *</label>
-                                        <input type="date" required name="arrivee" class="form-input w-full">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-300 mb-2">Date de départ *</label>
-                                        <input type="date" required name="depart" class="form-input w-full">
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-300 mb-2">Nombre de personnes *</label>
-                                    <select name="personnes" required class="form-select w-full">
-                                        <option value="1">1 personne</option>
-                                        <option value="2" selected>2 personnes</option>
-                                        <option value="3">3 personnes</option>
-                                        <option value="4">4 personnes</option>
-                                        <option value="5">5 personnes</option>
-                                        <option value="6">6 personnes</option>
-                                        <option value="7">7 personnes</option>
-                                        <option value="8">8 personnes</option>
-                                        <option value="9+">9+ personnes</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-300 mb-2">Message supplémentaire</label>
-                                    <textarea name="message" rows="3" class="form-input w-full"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Submit Button -->
-                    <div class="mt-12 text-center">
-                        <button type="submit" class="bg-gradient-gold hover:opacity-90 text-black px-12 py-4 rounded-full font-bold text-lg shadow-lg">
-                            <i class="fab fa-whatsapp mr-2"></i>Finaliser la Réservation via WhatsApp
-                        </button>
-                        <p class="text-gray-400 text-sm mt-4">
-                            Vous serez redirigé vers WhatsApp pour finaliser votre réservation avec notre équipe
-                        </p>
-                    </div>
-                </form>
-            </div>
+      </article>
+    </div>
+
+    <!-- Autres hébergements -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+      <div class="card p-6 text-center reveal">
+        <i class="fas fa-star text-xl mb-3"></i>
+        <h4 class="text-base mb-1">Chambre VIP</h4>
+        <div class="text-sm text-muted mb-4">55 000 FCFA</div>
+        <button class="add-service btn-ink !py-2 !px-4 !text-xs w-full justify-center" data-service="Chambre VIP" data-price="55000">Ajouter</button>
+      </div>
+      <div class="card p-6 text-center reveal">
+        <i class="fas fa-home text-xl mb-3"></i>
+        <h4 class="text-base mb-1">Appartement 2 Ch.</h4>
+        <div class="text-sm text-muted mb-4">80 000 FCFA</div>
+        <button class="add-service btn-ink !py-2 !px-4 !text-xs w-full justify-center" data-service="Appartement 2 Chambres" data-price="80000">Ajouter</button>
+      </div>
+      <div class="card p-6 text-center reveal">
+        <i class="fas fa-building text-xl mb-3"></i>
+        <h4 class="text-base mb-1">Villa 5 Chambres</h4>
+        <div class="text-sm text-muted mb-4">250 000 FCFA</div>
+        <button class="add-service btn-ink !py-2 !px-4 !text-xs w-full justify-center" data-service="Villa 5 Chambres" data-price="250000">Ajouter</button>
+      </div>
+      <div class="card p-6 text-center reveal">
+        <i class="fas fa-hotel text-xl mb-3"></i>
+        <h4 class="text-base mb-1">Villa 6 Chambres</h4>
+        <div class="text-sm text-muted mb-4">300 000 FCFA</div>
+        <button class="add-service btn-ink !py-2 !px-4 !text-xs w-full justify-center" data-service="Villa 6 Chambres" data-price="300000">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOISIRS -->
+<section id="loisirs" class="section">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Loisirs</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Aventures nautiques</h2>
+      <p class="text-muted text-lg leading-relaxed">Sensations fortes et détente sur les eaux de Kribi.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Jet Ski -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=1200&q=80" alt="Jet Ski">
+          <span class="price-tag absolute top-4 right-4">dès 60 000 FCFA</span>
         </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="bg-dark-bg py-12">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-8 md:mb-0">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-12 h-12 rounded-full overflow-hidden bg-black border border-accent/30">
-                            <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Logo" class="w-full h-full object-contain">
-                        </div>
-                        <div>
-                            <div class="text-lg font-bold">KRIBI<span class="gold-gradient">PARADISE</span></div>
-                            <div class="text-xs text-gray-500">Agence de Tourisme et de Loisirs</div>
-                        </div>
-                    </div>
-                    <div class="text-gray-500 text-sm">
-                        <p class="mb-1"><i class="fas fa-phone mr-2 text-accent"></i>694 795 189 / 671 026 530</p>
-                        <p class="mb-1"><i class="fas fa-envelope mr-2 text-accent"></i>kribiparadise@gmail.com</p>
-                        <p><i class="fas fa-map-marker-alt mr-2 text-accent"></i>Ngoye, Sud Cameroun</p>
-                    </div>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-gray-500 text-sm mb-4">
-                        © 2023 Kribi Paradise. Tous droits réservés.
-                    </div>
-                    <div class="text-sm text-gray-400">
-                        <p>ETS KRIBI PARADISE - NGOYE - SUD CAMEROUN - KRIBI</p>
-                        <p class="text-xs mt-2">RC/KBI/2019/A95 - N°CONTRIBUABLE: P0596143341860</p>
-                    </div>
-                </div>
-            </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Jet Ski</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Sensations fortes garanties sur les vagues de l'océan.</p>
+          <div class="flex justify-between text-sm mb-2"><span class="text-muted">30 minutes</span><span class="font-medium">60 000 FCFA</span></div>
+          <div class="flex justify-between text-sm mb-5"><span class="text-muted">1 heure</span><span class="font-medium">100 000 FCFA</span></div>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs" data-service="Jet Ski (1h)" data-price="100000">Ajouter à la réservation</button>
         </div>
-    </footer>
-    
-    <!-- JavaScript -->
-    <script>
-        // Fast loading
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loader').classList.add('hidden');
-            }, 500);
-        });
-        
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const closeMenu = document.getElementById('closeMenu');
-        
-        menuToggle.addEventListener('click', function() {
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        
-        closeMenu.addEventListener('click', function() {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Close mobile menu when clicking outside
-        mobileMenu.addEventListener('click', function(e) {
-            if (e.target === mobileMenu) {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-        
-        // Close mobile menu when clicking a link
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-        });
-        
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Scroll to top button
-        const scrollTopBtn = document.getElementById('scrollTop');
-        
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible');
-            }
-        });
-        
-        scrollTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // Reservation System
-        let selectedServices = [];
-        let totalPrice = 0;
-        
-        // Add service to reservation
-        document.querySelectorAll('.add-to-reservation').forEach(button => {
-            button.addEventListener('click', function() {
-                const service = this.getAttribute('data-service');
-                const price = parseInt(this.getAttribute('data-price'));
-                const type = this.getAttribute('data-type');
-                const category = this.getAttribute('data-category');
-                
-                // Check if service already exists
-                const existingIndex = selectedServices.findIndex(s => s.service === service);
-                
-                if (existingIndex > -1) {
-                    // Remove if already selected
-                    selectedServices.splice(existingIndex, 1);
-                    totalPrice -= price;
-                    this.textContent = this.textContent.includes('Ajouter') ? 'Ajouter' : 'Ajouter';
-                    this.classList.remove('bg-yellow-600');
-                    this.classList.add('bg-accent');
-                } else {
-                    // Add new service
-                    selectedServices.push({
-                        service: service,
-                        price: price,
-                        type: type,
-                        category: category
-                    });
-                    totalPrice += price;
-                    this.textContent = 'Retirer';
-                    this.classList.remove('bg-accent');
-                    this.classList.add('bg-yellow-600');
-                }
-                
-                updateReservationSummary();
-            });
-        });
-        
-        // Update reservation summary
-        function updateReservationSummary() {
-            const selectedServicesDiv = document.getElementById('selectedServices');
-            const servicesByCategoryDiv = document.getElementById('servicesByCategory');
-            const totalPriceDiv = document.getElementById('totalPrice');
-            const serviceCountDiv = document.getElementById('serviceCount');
-            
-            serviceCountDiv.textContent = selectedServices.length;
-            
-            if (selectedServices.length === 0) {
-                selectedServicesDiv.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-shopping-cart text-gray-700 text-4xl mb-4"></i>
-                        <p class="text-gray-400">Aucun service sélectionné pour le moment</p>
-                        <p class="text-gray-500 text-sm mt-2">Cliquez sur "Ajouter" sur les services ci-dessous</p>
-                    </div>
-                `;
-                selectedServicesDiv.classList.remove('hidden');
-                servicesByCategoryDiv.classList.add('hidden');
-            } else {
-                selectedServicesDiv.classList.add('hidden');
-                servicesByCategoryDiv.classList.remove('hidden');
-                
-                // Group services by category
-                const servicesByCategory = {};
-                selectedServices.forEach(item => {
-                    if (!servicesByCategory[item.category]) {
-                        servicesByCategory[item.category] = [];
-                    }
-                    servicesByCategory[item.category].push(item);
-                });
-                
-                // Build HTML by category
-                let html = '';
-                for (const category in servicesByCategory) {
-                    html += `
-                        <div class="mb-4">
-                            <h4 class="font-bold text-accent mb-2">${category}</h4>
-                            <div class="space-y-2">
-                    `;
-                    
-                    servicesByCategory[category].forEach(item => {
-                        html += `
-                            <div class="flex justify-between items-center py-2 px-3 selected-item rounded">
-                                <span class="text-gray-300">${item.service}</span>
-                                <div class="flex items-center">
-                                    <span class="font-bold text-accent mr-3">${item.price.toLocaleString()} FCFA</span>
-                                    <button class="remove-service text-red-400 hover:text-red-300" data-service="${item.service}">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    html += `
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                servicesByCategoryDiv.innerHTML = html;
-                
-                // Add event listeners to remove buttons
-                servicesByCategoryDiv.querySelectorAll('.remove-service').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const serviceToRemove = this.getAttribute('data-service');
-                        removeService(serviceToRemove);
-                    });
-                });
-            }
-            
-            totalPriceDiv.textContent = totalPrice.toLocaleString() + ' FCFA';
-            
-            // Update form checkboxes and radio buttons
-            updateFormSelections();
-        }
-        
-        // Remove service function
-        function removeService(serviceName) {
-            const index = selectedServices.findIndex(s => s.service === serviceName);
-            if (index > -1) {
-                totalPrice -= selectedServices[index].price;
-                selectedServices.splice(index, 1);
-                
-                // Update button states
-                document.querySelectorAll('.add-to-reservation').forEach(button => {
-                    if (button.getAttribute('data-service') === serviceName) {
-                        button.textContent = 'Ajouter';
-                        button.classList.remove('bg-yellow-600');
-                        button.classList.add('bg-accent');
-                    }
-                });
-                
-                updateReservationSummary();
-            }
-        }
-        
-        // Update form checkboxes and radio buttons based on selected services
-        function updateFormSelections() {
-            // Clear all form selections first
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
-            });
-            
-            // Check for package selection
-            const hasPackage = selectedServices.some(s => s.type === 'package');
-            
-            if (hasPackage) {
-                // If a package is selected, check the corresponding radio button
-                const packageService = selectedServices.find(s => s.type === 'package');
-                if (packageService) {
-                    document.querySelectorAll('.package-radio').forEach(radio => {
-                        radio.checked = (radio.getAttribute('data-service') === packageService.service);
-                    });
-                    document.querySelector('.no-package-radio').checked = false;
-                }
-            } else {
-                // If no package, check "Aucun package"
-                document.querySelector('.no-package-radio').checked = true;
-                document.querySelectorAll('.package-radio').forEach(radio => {
-                    radio.checked = false;
-                });
-                
-                // Check individual checkboxes based on selected services
-                selectedServices.forEach(item => {
-                    if (item.type !== 'package') {
-                        // Find and check the corresponding checkbox
-                        const checkbox = document.querySelector(`input[data-service="${item.service}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
-                        }
-                    }
-                });
-            }
-        }
-        
-        // Handle form checkbox changes
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const service = this.getAttribute('data-service');
-                const price = parseInt(this.getAttribute('data-price'));
-                const category = this.getAttribute('data-category');
-                
-                if (this.checked) {
-                    // If checking a checkbox, remove any package first
-                    selectedServices = selectedServices.filter(s => s.type !== 'package');
-                    
-                    // Add the service
-                    selectedServices.push({
-                        service: service,
-                        price: price,
-                        type: 'custom',
-                        category: category
-                    });
-                    
-                    // Update total
-                    totalPrice = selectedServices.reduce((sum, item) => sum + item.price, 0);
-                    
-                    // Uncheck package radio buttons and check "Aucun package"
-                    document.querySelectorAll('.package-radio').forEach(radio => {
-                        radio.checked = false;
-                    });
-                    document.querySelector('.no-package-radio').checked = true;
-                } else {
-                    // Remove the service
-                    const index = selectedServices.findIndex(s => s.service === service);
-                    if (index > -1) {
-                        selectedServices.splice(index, 1);
-                        totalPrice = selectedServices.reduce((sum, item) => sum + item.price, 0);
-                    }
-                }
-                
-                updateReservationSummary();
-            });
-        });
-        
-        // Handle package radio buttons
-        document.querySelectorAll('.package-radio').forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.checked) {
-                    const service = this.getAttribute('data-service');
-                    const price = parseInt(this.getAttribute('data-price'));
-                    const category = this.getAttribute('data-category');
-                    
-                    // Clear all selected services
-                    selectedServices = [];
-                    
-                    // Add the package
-                    selectedServices.push({
-                        service: service,
-                        price: price,
-                        type: 'package',
-                        category: category
-                    });
-                    
-                    // Update total
-                    totalPrice = price;
-                    
-                    // Uncheck all checkboxes
-                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                        cb.checked = false;
-                    });
-                    
-                    updateReservationSummary();
-                }
-            });
-        });
-        
-        // Handle "Aucun package" radio button
-        document.querySelector('.no-package-radio').addEventListener('change', function() {
-            if (this.checked) {
-                // Remove any package from selected services
-                selectedServices = selectedServices.filter(s => s.type !== 'package');
-                
-                // Recalculate total
-                totalPrice = selectedServices.reduce((sum, item) => sum + item.price, 0);
-                
-                updateReservationSummary();
-            }
-        });
-        
-        // Complete reservation form submission
-        document.getElementById('completeReservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const nom = formData.get('nom');
-            const email = formData.get('email');
-            const telephone = formData.get('telephone');
-            const arrivee = formData.get('arrivee');
-            const depart = formData.get('depart');
-            const personnes = formData.get('personnes');
-            const message = formData.get('message');
-            
-            if (selectedServices.length === 0) {
-                alert('Veuillez sélectionner au moins un service pour votre réservation.');
-                return;
-            }
-            
-            if (!nom || !email || !telephone || !arrivee || !depart || !personnes) {
-                alert('Veuillez remplir tous les champs obligatoires.');
-                return;
-            }
-            
-            // Create WhatsApp message
-            let whatsappMessage = `*NOUVELLE RÉSERVATION - KRIBI PARADISE*%0A%0A`;
-            
-            whatsappMessage += `*👤 INFORMATIONS CLIENT*%0A`;
-            whatsappMessage += `Nom: ${nom}%0A`;
-            whatsappMessage += `Email: ${email}%0A`;
-            whatsappMessage += `Téléphone: ${telephone}%0A`;
-            whatsappMessage += `Dates: ${arrivee} au ${depart}%0A`;
-            whatsappMessage += `Personnes: ${personnes}%0A%0A`;
-            
-            whatsappMessage += `*🛎️ SERVICES SÉLECTIONNÉS*%0A`;
-            selectedServices.forEach((item, index) => {
-                whatsappMessage += `${index + 1}. ${item.service} - ${item.price.toLocaleString()} FCFA%0A`;
-            });
-            
-            whatsappMessage += `%0A*💰 TOTAL: ${totalPrice.toLocaleString()} FCFA*%0A%0A`;
-            
-            if (message) {
-                whatsappMessage += `*📝 MESSAGE SUPPLÉMENTAIRE*%0A${message}%0A%0A`;
-            }
-            
-            whatsappMessage += `_---%0ACe message a été généré via le formulaire de réservation en ligne de Kribi Paradise_`;
-            
-            // Open WhatsApp
-            window.open(`https://wa.me/237694795189?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
-            
-            // Show success message
-            alert('Votre réservation a été envoyée avec succès ! Notre équipe vous contactera rapidement sur WhatsApp.');
-            
-            // Reset form (optional - you might want to keep the data)
-            // this.reset();
-            // selectedServices = [];
-            // totalPrice = 0;
-            // updateReservationSummary();
-            // 
-            // // Reset all add-to-reservation buttons
-            // document.querySelectorAll('.add-to-reservation').forEach(btn => {
-            //     btn.textContent = 'Ajouter';
-            //     btn.classList.remove('bg-yellow-600');
-            //     btn.classList.add('bg-accent');
-            // });
-        });
-        
-        // Set minimum date for arrival to today
-        const today = new Date().toISOString().split('T')[0];
-        const arrivalInput = document.querySelector('input[name="arrivee"]');
-        const departureInput = document.querySelector('input[name="depart"]');
-        
-        arrivalInput.min = today;
-        
-        // Set minimum date for departure based on arrival
-        arrivalInput.addEventListener('change', function() {
-            departureInput.min = this.value;
-        });
-        
-        // Animate elements on scroll
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.animate-slide-up');
-            
-            elements.forEach(element => {
-                const elementPosition = element.getBoundingClientRect().top;
-                const screenPosition = window.innerHeight / 1.2;
-                
-                if (elementPosition < screenPosition) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        }
-        
-        // Initialize animations
-        document.querySelectorAll('.animate-slide-up').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        });
-        
-        window.addEventListener('scroll', animateOnScroll);
-        animateOnScroll();
-    </script>
+      </article>
+
+      <!-- Quads -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" alt="Quads">
+          <span class="price-tag absolute top-4 right-4">dès 15 000 FCFA</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Quads</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Parcours aventure à travers les pistes de la forêt tropicale.</p>
+          <div class="flex justify-between text-sm mb-2"><span class="text-muted">30 minutes</span><span class="font-medium">15 000 FCFA</span></div>
+          <div class="flex justify-between text-sm mb-5"><span class="text-muted">1 heure</span><span class="font-medium">30 000 FCFA</span></div>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs" data-service="Quads (1h)" data-price="30000">Ajouter à la réservation</button>
+        </div>
+      </article>
+
+      <!-- Bateau -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1200&q=80" alt="Bateau">
+          <span class="price-tag absolute top-4 right-4">dès 80 000 FCFA</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Bateau de Plaisance</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Criques isolées et îles environnantes.</p>
+          <div class="flex justify-between text-sm mb-2"><span class="text-muted">Couple (1h)</span><span class="font-medium">80 000 FCFA</span></div>
+          <div class="flex justify-between text-sm mb-5"><span class="text-muted">VIP (1h)</span><span class="font-medium">300 000 FCFA</span></div>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs" data-service="Bateau de Plaisance" data-price="100000">Ajouter à la réservation</button>
+        </div>
+      </article>
+
+      <!-- Cheval -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="kribi paradise.jpg" alt="Balade à cheval">
+          <span class="price-tag absolute top-4 right-4">10 000 FCFA / h</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Balade à Cheval</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Détente le long des plages.</p>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs mt-3" data-service="Balade à Cheval (1h)" data-price="10000">Ajouter</button>
+        </div>
+      </article>
+
+      <!-- Kayak -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" alt="Kayak">
+          <span class="price-tag absolute top-4 right-4">20 000 FCFA / h</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Kayak</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Exploration des criques en kayak.</p>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs mt-3" data-service="Kayak (1h)" data-price="20000">Ajouter</button>
+        </div>
+      </article>
+
+      <!-- Hammam -->
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80" alt="Hammam">
+          <span class="price-tag absolute top-4 right-4">sur demande</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl mb-2">Hammam & Jacuzzi</h3>
+          <p class="text-muted text-sm mb-4 leading-relaxed">Espace bien-être et relaxation.</p>
+          <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs mt-3" data-service="Hammam & Jacuzzi" data-price="0">Ajouter</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TOURISME -->
+<section id="tourisme" class="section bg-mist">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Découvertes</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Explorez Kribi</h2>
+      <p class="text-muted text-lg leading-relaxed">Merveilles naturelles et culturelles de la région.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://camhebergement.com/img/2023-04-22.jpg" alt="Chutes de la Lobé">
+          <span class="badge-label absolute top-4 left-4">Incontournable</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg mb-2">Chutes de la Lobé</h3>
+          <p class="text-muted text-xs mb-4 leading-relaxed">Les seules chutes au monde qui se jettent dans l'océan.</p>
+          <div class="flex justify-between items-center">
+            <span class="font-medium text-sm">2 500 FCFA / pers</span>
+            <button class="add-service btn-ink !py-1.5 !px-4 !text-xs" data-service="Chutes de la Lobé" data-price="2500">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" alt="Pygmées">
+          <span class="badge-label absolute top-4 left-4">Culturel</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg mb-2">Campement Pygmées</h3>
+          <p class="text-muted text-xs mb-4 leading-relaxed">Rencontre authentique avec la communauté Baka.</p>
+          <button class="add-service btn-ink w-full justify-center !py-1.5 !text-xs" data-service="Campement Pygmées" data-price="7500">Ajouter</button>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://pictures.latribune.fr/cdn-cgi/image/format=auto,width=1200,height=675/691/1090691.png" alt="Port">
+          <span class="badge-label absolute top-4 left-4">Industriel</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg mb-2">Port en Eau Profonde</h3>
+          <p class="text-muted text-xs mb-4 leading-relaxed">Visite du port de Kribi.</p>
+          <div class="flex justify-between items-center">
+            <span class="font-medium text-sm">5 000 FCFA</span>
+            <button class="add-service btn-ink !py-1.5 !px-4 !text-xs" data-service="Port en Eau Profonde" data-price="5000">Ajouter</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-img relative">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Plages">
+          <span class="badge-label absolute top-4 left-4">Plages</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg mb-2">Plages Grand Batanga</h3>
+          <p class="text-muted text-xs mb-4 leading-relaxed">Les plus belles plages de sable blanc.</p>
+          <div class="flex justify-between items-center">
+            <span class="font-medium text-sm">6 000 FCFA</span>
+            <button class="add-service btn-ink !py-1.5 !px-4 !text-xs" data-service="Plages Grand Batanga" data-price="6000">Ajouter</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- VÉHICULES -->
+<section class="section">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Transport</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Mobilité confort</h2>
+      <p class="text-muted text-lg">Des véhicules pour vos déplacements à Kribi.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 max-w-3xl">
+      <div class="card p-8 text-center reveal">
+        <i class="fas fa-car text-2xl mb-4"></i>
+        <h3 class="text-xl mb-2">Véhicule Standard</h3>
+        <div class="text-2xl font-display mb-1">35 000 FCFA</div>
+        <div class="text-xs text-muted mb-5">/ 24 heures</div>
+        <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs" data-service="Véhicule Standard (24h)" data-price="35000">Ajouter</button>
+      </div>
+      <div class="card p-8 text-center reveal">
+        <i class="fas fa-car-side text-2xl mb-4"></i>
+        <h3 class="text-xl mb-2">Véhicule Prestige</h3>
+        <div class="text-2xl font-display mb-1">65 000 FCFA</div>
+        <div class="text-xs text-muted mb-5">/ 24 heures</div>
+        <button class="add-service btn-ink w-full justify-center !py-2.5 !text-xs" data-service="Véhicule Prestige (24h)" data-price="65000">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages" class="section bg-mist">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Forfaits couple</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Packages tout compris</h2>
+      <p class="text-muted text-lg">Des expériences complètes pour les couples.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Standard -->
+      <div class="card p-8 reveal">
+        <span class="text-xs uppercase tracking-widest text-muted">Économique</span>
+        <h3 class="text-2xl mt-3 mb-1">Standard</h3>
+        <div class="text-3xl font-display mb-6">150 000 <span class="text-base text-muted font-body">FCFA</span></div>
+        <ul class="space-y-3 text-sm text-muted mb-8">
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Studio standard</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Chutes de la Lobé</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Balade à cheval (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Quad bord de mer (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Kayak (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Transport inclus</li>
+        </ul>
+        <button class="add-service btn-ghost w-full justify-center" data-service="PACKAGE STANDARD" data-price="150000">Choisir ce package</button>
+      </div>
+
+      <!-- Prestige -->
+      <div class="card p-8 reveal border-2 !border-ink relative">
+        <span class="badge-label absolute -top-3 left-8">Populaire</span>
+        <span class="text-xs uppercase tracking-widest text-muted">Premium</span>
+        <h3 class="text-2xl mt-3 mb-1">Prestige</h3>
+        <div class="text-3xl font-display mb-6">200 000 <span class="text-base text-muted font-body">FCFA</span></div>
+        <ul class="space-y-3 text-sm text-muted mb-8">
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Studio prestige avec piscine</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Balade à cheval (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Chutes de la Lobé</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Bateau de plaisance (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Quad bord de mer (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Kayak (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Transport inclus</li>
+        </ul>
+        <button class="add-service btn-ink w-full justify-center" data-service="PACKAGE PRESTIGE" data-price="200000">Choisir ce package</button>
+      </div>
+
+      <!-- VIP -->
+      <div class="card p-8 reveal">
+        <span class="text-xs uppercase tracking-widest text-muted">Luxe</span>
+        <h3 class="text-2xl mt-3 mb-1">VIP</h3>
+        <div class="text-3xl font-display mb-6">250 000 <span class="text-base text-muted font-body">FCFA</span></div>
+        <ul class="space-y-3 text-sm text-muted mb-8">
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Chambre de luxe avec piscine</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Bateau de plaisance (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Quad bord de mer (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Jet-ski (30 min)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Chutes de la Lobé</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Balade à cheval (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Kayak (1h)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> FlyWave (nouveau)</li>
+          <li class="flex gap-3"><i class="fas fa-check text-ink mt-1 text-xs"></i> Transport inclus</li>
+        </ul>
+        <button class="add-service btn-ghost w-full justify-center" data-service="PACKAGE VIP" data-price="250000">Choisir ce package</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RÉSERVATION -->
+<section id="reservation" class="section">
+  <div class="container-x">
+    <div class="max-w-2xl mb-16 reveal">
+      <span class="badge-label mb-5 inline-block">Réservation</span>
+      <h2 class="text-4xl md:text-5xl mb-4">Composez votre séjour</h2>
+      <p class="text-muted text-lg">Sélectionnez vos services, puis finalisez via WhatsApp.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-8 items-start">
+      <!-- Colonne sélection -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Résumé -->
+        <div class="card p-6 sticky top-24">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg">Votre sélection</h3>
+            <span id="serviceCount" class="text-xs text-muted">0 service</span>
+          </div>
+
+          <div id="summaryEmpty" class="text-center py-8">
+            <i class="fas fa-shopping-bag text-2xl text-line mb-3"></i>
+            <p class="text-sm text-muted">Aucun service sélectionné</p>
+          </div>
+
+          <div id="summaryList" class="hidden space-y-1"></div>
+
+          <div class="flex justify-between items-center pt-4 mt-4 border-t border-line">
+            <span class="text-sm text-muted">Total estimé</span>
+            <span id="totalPrice" class="text-xl font-display">0 FCFA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne formulaire -->
+      <div class="lg:col-span-3">
+        <form id="reservationForm" class="card p-6 md:p-8 space-y-6" novalidate>
+          <!-- Packages (radio-like custom) -->
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Package tout compris</h4>
+            <div class="space-y-2" id="packageChoices">
+              <label class="choice" data-service="PACKAGE STANDARD" data-price="150000">
+                <span class="choice-mark"><i class="fas fa-check"></i></span>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">Package Standard</div>
+                  <div class="choice-price">150 000 FCFA</div>
+                </div>
+              </label>
+              <label class="choice" data-service="PACKAGE PRESTIGE" data-price="200000">
+                <span class="choice-mark"><i class="fas fa-check"></i></span>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">Package Prestige</div>
+                  <div class="choice-price">200 000 FCFA</div>
+                </div>
+              </label>
+              <label class="choice" data-service="PACKAGE VIP" data-price="250000">
+                <span class="choice-mark"><i class="fas fa-check"></i></span>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">Package VIP</div>
+                  <div class="choice-price">250 000 FCFA</div>
+                </div>
+              </label>
+              <label class="choice" data-service="" data-price="0" data-none="true">
+                <span class="choice-mark"><i class="fas fa-check"></i></span>
+                <div class="flex-1">
+                  <div class="text-sm font-medium">Aucun package — je choisis mes services</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Hébergement -->
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Hébergement</h4>
+            <div class="space-y-2" id="hebergementChoices">
+              <label class="choice" data-service="Chambre Standard" data-price="35000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Chambre Standard</div><div class="choice-price">35 000 FCFA / nuit</div></div></label>
+              <label class="choice" data-service="Chambre Prestige" data-price="45000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Chambre Prestige</div><div class="choice-price">45 000 FCFA / nuit</div></div></label>
+              <label class="choice" data-service="Chambre VIP" data-price="55000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Chambre VIP</div><div class="choice-price">55 000 FCFA / nuit</div></div></label>
+              <label class="choice" data-service="Villa 4 Chambres" data-price="200000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Villa 4 Chambres</div><div class="choice-price">200 000 FCFA / nuit</div></div></label>
+            </div>
+          </div>
+
+          <!-- Loisirs -->
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Loisirs</h4>
+            <div class="space-y-2" id="loisirsChoices">
+              <label class="choice" data-service="Jet Ski (1h)" data-price="100000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Jet Ski (1h)</div><div class="choice-price">100 000 FCFA</div></div></label>
+              <label class="choice" data-service="Quads (1h)" data-price="30000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Quads (1h)</div><div class="choice-price">30 000 FCFA</div></div></label>
+              <label class="choice" data-service="Bateau de Plaisance" data-price="100000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Bateau de Plaisance</div><div class="choice-price">100 000 FCFA</div></div></label>
+              <label class="choice" data-service="Balade à Cheval (1h)" data-price="10000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Balade à Cheval (1h)</div><div class="choice-price">10 000 FCFA</div></div></label>
+              <label class="choice" data-service="Kayak (1h)" data-price="20000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Kayak (1h)</div><div class="choice-price">20 000 FCFA</div></div></label>
+            </div>
+          </div>
+
+          <!-- Tourisme -->
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Tourisme</h4>
+            <div class="space-y-2" id="tourismeChoices">
+              <label class="choice" data-service="Chutes de la Lobé" data-price="2500"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Chutes de la Lobé</div><div class="choice-price">2 500 FCFA</div></div></label>
+              <label class="choice" data-service="Campement Pygmées" data-price="7500"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Campement Pygmées</div><div class="choice-price">7 500 FCFA</div></div></label>
+              <label class="choice" data-service="Port en Eau Profonde" data-price="5000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Port en Eau Profonde</div><div class="choice-price">5 000 FCFA</div></div></label>
+              <label class="choice" data-service="Plages Grand Batanga" data-price="6000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Plages Grand Batanga</div><div class="choice-price">6 000 FCFA</div></div></label>
+            </div>
+          </div>
+
+          <!-- Transport -->
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Transport</h4>
+            <div class="space-y-2" id="transportChoices">
+              <label class="choice" data-service="Véhicule Standard (24h)" data-price="35000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Véhicule Standard</div><div class="choice-price">35 000 FCFA / 24h</div></div></label>
+              <label class="choice" data-service="Véhicule Prestige (24h)" data-price="65000"><span class="choice-mark"><i class="fas fa-check"></i></span><div class="flex-1"><div class="text-sm font-medium">Véhicule Prestige</div><div class="choice-price">65 000 FCFA / 24h</div></div></label>
+            </div>
+          </div>
+
+          <!-- Informations -->
+          <div class="pt-6 border-t border-line">
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4">Informations personnelles</h4>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-xs text-muted mb-1.5">Nom complet *</label>
+                <input type="text" name="nom" required class="field" placeholder="Votre nom">
+              </div>
+              <div>
+                <label class="block text-xs text-muted mb-1.5">Email *</label>
+                <input type="email" name="email" required class="field" placeholder="vous@email.com">
+              </div>
+              <div>
+                <label class="block text-xs text-muted mb-1.5">Téléphone *</label>
+                <input type="tel" name="telephone" required class="field" placeholder="+237 ...">
+              </div>
+              <div>
+                <label class="block text-xs text-muted mb-1.5">Arrivée *</label>
+                <input type="date" name="arrivee" required class="field">
+              </div>
+              <div>
+                <label class="block text-xs text-muted mb-1.5">Départ *</label>
+                <input type="date" name="depart" required class="field">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs text-muted mb-1.5">Nombre de personnes *</label>
+                <select name="personnes" required class="field">
+                  <option value="1">1 personne</option>
+                  <option value="2" selected>2 personnes</option>
+                  <option value="3">3 personnes</option>
+                  <option value="4">4 personnes</option>
+                  <option value="5">5 personnes</option>
+                  <option value="6">6 personnes</option>
+                  <option value="7">7 personnes</option>
+                  <option value="8">8 personnes</option>
+                  <option value="9+">9+ personnes</option>
+                </select>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs text-muted mb-1.5">Message (facultatif)</label>
+                <textarea name="message" rows="3" class="field" placeholder="Demandes particulières..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="formError" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></div>
+
+          <button type="submit" id="submitBtn" class="btn-ink w-full justify-center !py-4 text-base">
+            <i class="fab fa-whatsapp"></i> Finaliser via WhatsApp
+          </button>
+          <p class="text-xs text-muted text-center">Vous serez redirigé vers WhatsApp pour confirmer votre réservation.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-ink text-white py-16">
+  <div class="container-x">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-10">
+      <div>
+        <div class="text-lg font-semibold mb-2">KRIBI PARADISE</div>
+        <p class="text-sm text-white/60 mb-6">Agence de tourisme et de loisirs</p>
+        <div class="text-sm text-white/60 space-y-2">
+          <p><i class="fas fa-phone mr-2"></i>694 795 189 / 671 026 530</p>
+          <p><i class="fas fa-envelope mr-2"></i>kribiparadise@gmail.com</p>
+          <p><i class="fas fa-map-marker-alt mr-2"></i>Ngoye, Sud Cameroun</p>
+        </div>
+      </div>
+      <div class="text-sm text-white/50">
+        <p>ETS KRIBI PARADISE — NGOYE — SUD CAMEROUN — KRIBI</p>
+        <p class="mt-2 text-xs">RC/KBI/2019/A95 — N°CONTRIBUABLE: P0596143341860</p>
+        <p class="mt-6 text-xs">© 2024 Kribi Paradise. Tous droits réservés.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ ÉTAT CENTRALISÉ (source unique de vérité) ============ */
+const state = {
+  services: [],           // [{ service, price, isPackage }]
+  packageSelected: null,  // string | null
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+/* ---------- Loader ---------- */
+window.addEventListener('load', () => {
+  setTimeout(() => $('#loader').classList.add('hidden'), 400);
+});
+
+/* ---------- Mobile menu ---------- */
+$('#menuToggle').addEventListener('click', () => {
+  $('#mobileMenu').classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+$('#closeMenu').addEventListener('click', () => {
+  $('#mobileMenu').classList.remove('active');
+  document.body.style.overflow = '';
+});
+$$('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
+  $('#mobileMenu').classList.remove('active');
+  document.body.style.overflow = '';
+}));
+
+/* ---------- Scroll top ---------- */
+const scrollBtn = $('#scrollTop');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('visible', window.scrollY > 300);
+});
+scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ---------- Scrollspy (lien actif) ---------- */
+const sections = ['hebergement', 'loisirs', 'tourisme', 'packages', 'reservation'];
+const navLinks = [...$$('.nav-link')];
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+sections.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+
+/* ---------- Reveal on scroll ---------- */
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
+}, { threshold: 0.12 });
+$$('.reveal').forEach(el => revealIO.observe(el));
+
+/* =========================================================
+   LOGIQUE DE RÉSERVATION — refaite de zéro
+   - Un seul tableau `state.services`
+   - Les boutons "Ajouter" (cartes) et les "choice" (formulaire)
+     agissent sur le MÊME état via addService/removeService
+   - Le résumé et le total sont recalculés depuis l'état
+   - Aucune manipulation directe de checkboxes → plus de désync
+   ========================================================= */
+
+function isSameService(a, b) { return a.service === b.service; }
+
+function addService(service, price, isPackage = false) {
+  if (!service) return;
+  // Si on ajoute un package, on remplace toute la sélection
+  if (isPackage) {
+    state.services = [{ service, price, isPackage: true }];
+    state.packageSelected = service;
+  } else {
+    // Un service individuel annule le package
+    state.packageSelected = null;
+    state.services = state.services.filter(s => !s.isPackage);
+    // Toggle : si déjà présent, on retire
+    if (state.services.some(s => isSameService(s, { service }))) {
+      state.services = state.services.filter(s => !isSameService(s, { service }));
+    } else {
+      state.services.push({ service, price, isPackage: false });
+    }
+  }
+  render();
+}
+
+function removeService(service) {
+  state.services = state.services.filter(s => s.service !== service);
+  if (state.packageSelected === service) state.packageSelected = null;
+  render();
+}
+
+function clearPackage() {
+  state.services = state.services.filter(s => !s.isPackage);
+  state.packageSelected = null;
+  render();
+}
+
+function total() {
+  return state.services.reduce((sum, s) => sum + Number(s.price || 0), 0);
+}
+
+/* ---------- Rendu ---------- */
+function render() {
+  // Compteur
+  $('#serviceCount').textContent = state.services.length + (state.services.length > 1 ? ' services' : ' service');
+
+  // Résumé
+  const summaryEmpty = $('#summaryEmpty');
+  const summaryList = $('#summaryList');
+
+  if (state.services.length === 0) {
+    summaryEmpty.classList.remove('hidden');
+    summaryList.classList.add('hidden');
+    summaryList.innerHTML = '';
+  } else {
+    summaryEmpty.classList.add('hidden');
+    summaryList.classList.remove('hidden');
+    summaryList.innerHTML = state.services.map(s => `
+      <div class="summary-row">
+        <span class="text-sm">${s.service}${s.isPackage ? ' <span class="text-[10px] text-muted">(package)</span>' : ''}</span>
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-medium">${Number(s.price).toLocaleString('fr-FR')} FCFA</span>
+          <button type="button" class="remove-btn" data-remove="${s.service}" aria-label="Retirer"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+    `).join('');
+    summaryList.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => removeService(btn.dataset.remove));
+    });
+  }
+
+  // Total
+  $('#totalPrice').textContent = total().toLocaleString('fr-FR') + ' FCFA';
+
+  // Synchroniser les "choice" du formulaire
+  $$('.choice').forEach(choice => {
+    const svc = choice.dataset.service;
+    const isNone = choice.dataset.none === 'true';
+    let active = false;
+    if (isNone) {
+      active = state.services.length === 0 || (!state.packageSelected && state.services.length > 0 && state.services.every(s => !s.isPackage));
+      // "Aucun package" actif si aucun package sélectionné
+      active = !state.packageSelected;
+    } else if (choice.closest('#packageChoices')) {
+      active = state.packageSelected === svc;
+    } else {
+      active = state.services.some(s => s.service === svc && !s.isPackage);
+    }
+    choice.classList.toggle('selected', active);
+  });
+}
+
+/* ---------- Boutons "Ajouter" des cartes ---------- */
+$$('.add-service').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const service = btn.dataset.service;
+    const price = Number(btn.dataset.price);
+    const isPackage = service.startsWith('PACKAGE');
+    // Feedback visuel
+    const already = state.services.some(s => s.service === service);
+    addService(service, price, isPackage);
+    btn.textContent = (!already && state.services.some(s => s.service === service)) ? 'Retirer' : 'Ajouter';
+    // Scroll doux vers le résumé si on ajoute
+    if (!already && !isPackage) {
+      // Pas de scroll forcé pour ne pas gêner
+    }
+  });
+});
+
+/* ---------- "choice" du formulaire (packages + services) ---------- */
+$$('.choice').forEach(choice => {
+  choice.addEventListener('click', (e) => {
+    e.preventDefault();
+    const service = choice.dataset.service;
+    const price = Number(choice.dataset.price || 0);
+    const isNone = choice.dataset.none === 'true';
+
+    if (isNone) {
+      clearPackage();
+      return;
+    }
+    const isPackage = choice.closest('#packageChoices') !== null;
+    if (isPackage) {
+      if (state.packageSelected === service) {
+        // Désélectionner le package
+        clearPackage();
+      } else {
+        addService(service, price, true);
+      }
+    } else {
+      // Service individuel : toggle
+      if (state.services.some(s => s.service === service && !s.isPackage)) {
+        removeService(service);
+      } else {
+        addService(service, price, false);
+      }
+    }
+  });
+});
+
+/* ---------- Validation + envoi WhatsApp ---------- */
+const form = $('#reservationForm');
+const formError = $('#formError');
+const submitBtn = $('#submitBtn');
+
+// Dates : min = aujourd'hui, départ >= arrivée
+const today = new Date().toISOString().split('T')[0];
+const arrival = form.querySelector('[name="arrivee"]');
+const departure = form.querySelector('[name="depart"]');
+arrival.min = today;
+arrival.addEventListener('change', () => { departure.min = arrival.value; });
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  formError.classList.add('hidden');
+
+  // Anti double-submit
+  if (submitBtn.disabled) return;
+
+  // Validation
+  const data = new FormData(form);
+  const required = ['nom', 'email', 'telephone', 'arrivee', 'depart', 'personnes'];
+  const missing = required.filter(k => !String(data.get(k) || '').trim());
+
+  if (state.services.length === 0) {
+    return showError('Veuillez sélectionner au moins un service ou un package.');
+  }
+  if (missing.length) {
+    return showError('Veuillez remplir tous les champs obligatoires.');
+  }
+  if (data.get('depart') < data.get('arrivee')) {
+    return showError('La date de départ doit être après la date d\'arrivée.');
+  }
+
+  // Construction du message
+  const lines = [];
+  lines.push('*NOUVELLE RÉSERVATION — KRIBI PARADISE*');
+  lines.push('');
+  lines.push('*Informations client*');
+  lines.push('Nom : ' + data.get('nom'));
+  lines.push('Email : ' + data.get('email'));
+  lines.push('Téléphone : ' + data.get('telephone'));
+  lines.push('Dates : ' + data.get('arrivee') + ' au ' + data.get('depart'));
+  lines.push('Personnes : ' + data.get('personnes'));
+  lines.push('');
+  lines.push('*Services sélectionnés*');
+  state.services.forEach((s, i) => {
+    lines.push(`${i + 1}. ${s.service} — ${Number(s.price).toLocaleString('fr-FR')} FCFA`);
+  });
+  lines.push('');
+  lines.push(`*TOTAL : ${total().toLocaleString('fr-FR')} FCFA*`);
+  if (data.get('message')) {
+    lines.push('');
+    lines.push('*Message*');
+    lines.push(data.get('message'));
+  }
+  lines.push('');
+  lines.push('_Généré via kribiparadise.com_');
+
+  const url = 'https://wa.me/237694795189?text=' + encodeURIComponent(lines.join('\n'));
+
+  // Feedback
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ouverture de WhatsApp...';
+  window.open(url, '_blank');
+
+  setTimeout(() => {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Finaliser via WhatsApp';
+  }, 2500);
+});
+
+function showError(msg) {
+  formError.textContent = msg;
+  formError.classList.remove('hidden');
+  formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ---------- Init ---------- */
+render();
+</script>
+
 </body>
 </html>
-
