@@ -174,7 +174,7 @@ tailwind.config = {
   }
   .scroll-top.visible { opacity:1; transform:translateY(0); }
 
-  /* Hero — overlay allégé pour laisser voir l'image */
+  /* Hero */
   .hero {
     min-height:100vh; display:flex; align-items:center; padding-top:80px;
     position:relative;
@@ -195,7 +195,7 @@ tailwind.config = {
   .hero > * { position:relative; z-index:1; }
   .hero h1, .hero p { text-shadow:0 1px 2px rgba(255,255,255,0.5); }
 
-  /* ============ GALLERY ============ */
+  /* Gallery */
   .gallery-grid {
     display:grid;
     grid-template-columns: repeat(4, 1fr);
@@ -237,7 +237,6 @@ tailwind.config = {
   }
   .gallery-item:hover .gallery-zoom { opacity:1; transform:scale(1); }
 
-  /* Layout asymétrique */
   .gallery-item.span-2 { grid-column: span 2; }
   .gallery-item.row-2 { grid-row: span 2; }
   .gallery-item.tall { grid-row: span 2; }
@@ -295,6 +294,58 @@ tailwind.config = {
     font-family:'Playfair Display',serif;
   }
 
+  /* ============ CART FLOATING ============ */
+  .cart-float {
+    position:fixed; bottom:24px; right:96px; width:58px; height:58px;
+    background:#0A0A0A; color:#fff; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-size:20px; z-index:101;
+    box-shadow:0 8px 24px rgba(0,0,0,0.25); cursor:pointer;
+    transition:transform .25s ease, background .2s ease;
+  }
+  .cart-float:hover { transform:scale(1.08); }
+  .cart-float .cart-badge {
+    position:absolute; top:-4px; right:-4px; min-width:22px; height:22px;
+    background:#fff; color:#0A0A0A; border-radius:999px; font-size:11px;
+    font-weight:700; display:flex; align-items:center; justify-content:center;
+    padding:0 5px; border:2px solid #0A0A0A;
+    transform:scale(0); transition:transform .25s cubic-bezier(.2,.8,.2,1.4);
+  }
+  .cart-float.has-items .cart-badge { transform:scale(1); }
+  .cart-float.bump { animation:cartBump .4s ease; }
+  @keyframes cartBump {
+    0%,100% { transform:scale(1); }
+    40% { transform:scale(1.18); }
+  }
+
+  /* Cart Drawer */
+  #cartDrawer {
+    position:fixed; inset:0; z-index:1500; visibility:hidden;
+  }
+  #cartDrawer.active { visibility:visible; }
+  #cartDrawer .cart-overlay {
+    position:absolute; inset:0; background:rgba(10,10,10,0.45);
+    backdrop-filter:blur(4px); opacity:0; transition:opacity .3s ease;
+  }
+  #cartDrawer.active .cart-overlay { opacity:1; }
+  #cartDrawer .cart-panel {
+    position:absolute; top:0; right:0; bottom:0; width:100%; max-width:420px;
+    background:#fff; display:flex; flex-direction:column;
+    transform:translateX(100%); transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    box-shadow:-20px 0 60px rgba(0,0,0,0.15);
+  }
+  #cartDrawer.active .cart-panel { transform:translateX(0); }
+  .cart-item {
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:14px 0; border-bottom:1px solid #F0F0F0;
+  }
+  .cart-item:last-child { border-bottom:none; }
+  .cart-item-remove {
+    width:28px; height:28px; border-radius:50%; background:#F7F7F5;
+    display:flex; align-items:center; justify-content:center;
+    color:#6B6B6B; font-size:11px; transition:all .2s ease; flex-shrink:0;
+  }
+  .cart-item-remove:hover { background:#FEE2E2; color:#DC2626; }
+
   .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
   .reveal.in { opacity:1; transform:translateY(0); }
 
@@ -315,8 +366,49 @@ tailwind.config = {
   <i class="fab fa-whatsapp"></i>
 </a>
 
+<!-- Cart floating button -->
+<button class="cart-float" id="cartFloat" aria-label="Voir ma sélection">
+  <i class="fas fa-shopping-bag"></i>
+  <span class="cart-badge" id="cartBadge">0</span>
+</button>
+
 <!-- Scroll top -->
 <div class="scroll-top" id="scrollTop" aria-label="Haut de page"><i class="fas fa-chevron-up"></i></div>
+
+<!-- Cart Drawer -->
+<div id="cartDrawer" aria-hidden="true">
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-panel">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-line">
+      <div>
+        <h3 class="text-lg font-display">Ma sélection</h3>
+        <p class="text-xs text-muted mt-0.5"><span id="cartCount">0</span> service(s)</p>
+      </div>
+      <button id="cartClose" class="w-9 h-9 rounded-full bg-mist flex items-center justify-center text-ink" aria-label="Fermer">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-6" id="cartItems">
+      <div class="text-center py-16" id="cartEmpty">
+        <i class="fas fa-shopping-bag text-3xl text-line mb-4"></i>
+        <p class="text-sm text-muted">Votre sélection est vide</p>
+        <p class="text-xs text-muted mt-2">Ajoutez des services depuis les cartes</p>
+      </div>
+      <div id="cartList" class="hidden"></div>
+    </div>
+
+    <div class="border-t border-line px-6 py-5 space-y-4">
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-muted">Total estimé</span>
+        <span class="text-2xl font-display" id="cartTotal">0 FCFA</span>
+      </div>
+      <a href="#reservation" id="cartConfirm" class="btn-ink w-full justify-center !py-3.5 opacity-40 pointer-events-none">
+        <i class="fab fa-whatsapp"></i> Confirmer la réservation
+      </a>
+    </div>
+  </aside>
+</div>
 
 <!-- NAV -->
 <nav class="nav">
@@ -641,7 +733,7 @@ tailwind.config = {
   </div>
 </section>
 
-<!-- ============ GALERIE ============ -->
+<!-- GALERIE -->
 <section id="galerie" class="section">
   <div class="container-x">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 reveal">
@@ -660,7 +752,6 @@ tailwind.config = {
     </div>
 
     <div class="gallery-grid reveal" id="galleryGrid">
-      <!-- Les images ci-dessous sont des exemples : remplace les "src" par tes propres photos -->
       <figure class="gallery-item span-2 tall" data-cat="plages" data-full="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" data-caption="Plage de sable blanc — Kribi">
         <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Plage de Kribi">
         <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
@@ -741,6 +832,15 @@ tailwind.config = {
           <div class="g-cat">Aventures</div>
         </figcaption>
       </figure>
+    </div>
+
+    <!-- Bouton vers la galerie complète -->
+    <div class="text-center mt-14 reveal">
+      <a href="galerie.html" class="btn-ink !px-10 !py-4 text-base">
+        <i class="fas fa-images"></i> Voir plus d'images
+        <i class="fas fa-arrow-right text-xs ml-1"></i>
+      </a>
+      <p class="text-xs text-muted mt-4">Découvrez toute la collection Kribi Paradise</p>
     </div>
   </div>
 </section>
@@ -1127,6 +1227,8 @@ function render() {
     }
     choice.classList.toggle('selected', active);
   });
+
+  updateCartUI();
 }
 
 $$('.add-service').forEach(btn => {
@@ -1216,12 +1318,87 @@ function showError(msg) {
   formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+/* ============ PANIER FLOTTANT ============ */
+const cartFloat = document.getElementById('cartFloat');
+const cartDrawer = document.getElementById('cartDrawer');
+const cartBadge = document.getElementById('cartBadge');
+const cartCount = document.getElementById('cartCount');
+const cartEmpty = document.getElementById('cartEmpty');
+const cartList = document.getElementById('cartList');
+const cartTotal = document.getElementById('cartTotal');
+const cartConfirm = document.getElementById('cartConfirm');
+
+function updateCartUI() {
+  const count = state.services.length;
+  cartBadge.textContent = count;
+  cartCount.textContent = count;
+  cartFloat.classList.toggle('has-items', count > 0);
+
+  if (count === 0) {
+    cartEmpty.classList.remove('hidden');
+    cartList.classList.add('hidden');
+    cartList.innerHTML = '';
+    cartConfirm.classList.add('opacity-40','pointer-events-none');
+  } else {
+    cartEmpty.classList.add('hidden');
+    cartList.classList.remove('hidden');
+    cartList.innerHTML = state.services.map(s => `
+      <div class="cart-item">
+        <div class="flex-1">
+          <div class="text-sm font-medium">${s.service}</div>
+          <div class="text-xs text-muted mt-0.5">${Number(s.price).toLocaleString('fr-FR')} FCFA</div>
+        </div>
+        <button class="cart-item-remove" data-cart-remove="${s.service}" aria-label="Retirer">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `).join('');
+    cartList.querySelectorAll('[data-cart-remove]').forEach(btn => {
+      btn.addEventListener('click', () => removeService(btn.dataset.cartRemove));
+    });
+    cartConfirm.classList.remove('opacity-40','pointer-events-none');
+  }
+
+  cartTotal.textContent = total().toLocaleString('fr-FR') + ' FCFA';
+}
+
+function openCart() {
+  cartDrawer.classList.add('active');
+  cartDrawer.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  updateCartUI();
+}
+function closeCart() {
+  cartDrawer.classList.remove('active');
+  cartDrawer.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+cartFloat.addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+cartConfirm.addEventListener('click', () => {
+  closeCart();
+  setTimeout(() => {
+    document.getElementById('reservation').scrollIntoView({ behavior:'smooth' });
+  }, 250);
+});
+
+/* Bump animation à chaque ajout */
+const _origAdd = addService;
+window.addService = function(...args) {
+  _origAdd.apply(this, args);
+  cartFloat.classList.remove('bump');
+  void cartFloat.offsetWidth;
+  cartFloat.classList.add('bump');
+};
+
 /* ============ GALERIE ============ */
 const galleryItems = [...$$('.gallery-item')];
 let currentIndex = 0;
 let visibleItems = [...galleryItems];
 
-/* Filtres */
 $$('.filter-pill').forEach(pill => {
   pill.addEventListener('click', () => {
     $$('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -1235,7 +1412,6 @@ $$('.filter-pill').forEach(pill => {
   });
 });
 
-/* Lightbox */
 const lightbox = $('#lightbox');
 const lbImg = $('#lbImg');
 const lbCaption = $('#lbCaption');
@@ -1259,16 +1435,12 @@ function closeLightbox() {
 
 function showNext() {
   currentIndex = (currentIndex + 1) % visibleItems.length;
-  const item = visibleItems[currentIndex];
-  lbImg.src = item.dataset.full || item.querySelector('img').src;
-  lbCaption.textContent = item.dataset.caption || '';
+  openLightbox(currentIndex);
 }
 
 function showPrev() {
   currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
-  const item = visibleItems[currentIndex];
-  lbImg.src = item.dataset.full || item.querySelector('img').src;
-  lbCaption.textContent = item.dataset.caption || '';
+  openLightbox(currentIndex);
 }
 
 galleryItems.forEach(item => {
