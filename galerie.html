@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie | Kribi Paradise</title>
+<meta name="description" content="Galerie photo complète de Kribi Paradise — plages, aventures, hébergements et nature à Kribi, Cameroun.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink:'#0A0A0A', paper:'#FFFFFF', mist:'#F7F7F5', line:'#EAEAEA', muted:'#6B6B6B' },
+    fontFamily: { display:['Playfair Display','serif'], body:['Inter','sans-serif'] },
+  }}
+}
+</script>
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:#FFFFFF; color:#0A0A0A; font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  h1,h2,h3,h4 { font-family:'Playfair Display',serif; font-weight:600; letter-spacing:-0.02em; }
+
+  .container-x { max-width:1280px; margin:0 auto; padding:0 24px; }
+
+  .btn-ink {
+    background:#0A0A0A; color:#fff; font-weight:600; font-size:0.9rem;
+    padding:14px 28px; border-radius:999px; display:inline-flex; align-items:center;
+    gap:8px; transition:all .25s ease; border:1px solid #0A0A0A; text-decoration:none;
+  }
+  .btn-ink:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,0,0,0.18); }
+  .btn-ghost {
+    background:transparent; color:#0A0A0A; font-weight:600; font-size:0.9rem;
+    padding:14px 28px; border-radius:999px; display:inline-flex; align-items:center;
+    gap:8px; border:1px solid #D4D4D4; transition:all .25s ease; text-decoration:none;
+  }
+  .btn-ghost:hover { border-color:#0A0A0A; background:#F7F7F5; }
+
+  .badge-label {
+    display:inline-block; background:#0A0A0A; color:#fff;
+    font-size:0.7rem; font-weight:600; letter-spacing:0.08em;
+    text-transform:uppercase; padding:6px 14px; border-radius:999px;
+  }
+
+  /* Header */
+  .nav {
+    position:fixed; top:0; width:100%; z-index:1000;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+  }
+
+  /* Hero galerie */
+  .gallery-hero {
+    padding:160px 0 60px; text-align:center;
+    background:linear-gradient(to bottom, #FAFAF8 0%, #FFFFFF 100%);
+  }
+  .gallery-hero h1 { font-size:clamp(2.5rem, 6vw, 4.5rem); line-height:1.05; }
+  .gallery-hero p { color:#6B6B6B; max-width:560px; margin:20px auto 0; font-size:1.05rem; }
+
+  /* Filtres sticky */
+  .filters-bar {
+    position:sticky; top:72px; z-index:50;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:saturate(180%) blur(16px);
+    border-bottom:1px solid #F0F0F0;
+    padding:16px 0;
+  }
+  .filter-pill {
+    padding:9px 20px; border-radius:999px; font-size:0.82rem; font-weight:500;
+    border:1px solid #E2E2E2; color:#6B6B6B; background:#fff;
+    transition:all .2s ease; cursor:pointer; white-space:nowrap;
+  }
+  .filter-pill:hover { border-color:#0A0A0A; color:#0A0A0A; }
+  .filter-pill.active { background:#0A0A0A; color:#fff; border-color:#0A0A0A; }
+
+  /* Grille galerie */
+  .gallery-grid {
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    gap:14px;
+  }
+  .gallery-item {
+    position:relative; overflow:hidden; border-radius:18px; cursor:pointer;
+    background:#F2F2F0;
+    transition:transform .4s ease, box-shadow .4s ease;
+  }
+  .gallery-item img {
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .gallery-item:hover img { transform:scale(1.06); }
+  .gallery-item::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 55%);
+    opacity:0; transition:opacity .35s ease;
+  }
+  .gallery-item:hover::after { opacity:1; }
+  .gallery-caption {
+    position:absolute; left:18px; right:18px; bottom:16px; z-index:2;
+    color:#fff; opacity:0; transform:translateY(10px);
+    transition:all .35s ease;
+  }
+  .gallery-item:hover .gallery-caption { opacity:1; transform:translateY(0); }
+  .gallery-caption .g-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; }
+  .gallery-caption .g-cat { font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.75); margin-top:2px; }
+  .gallery-zoom {
+    position:absolute; top:14px; right:14px; z-index:2;
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.9); color:#0A0A0A;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; opacity:0; transform:scale(0.8);
+    transition:all .3s ease;
+  }
+  .gallery-item:hover .gallery-zoom { opacity:1; transform:scale(1); }
+  .gallery-item.span-2 { grid-column:span 2; }
+  .gallery-item.row-2 { grid-row:span 2; }
+  .gallery-item.tall { grid-row:span 2; }
+
+  @media(max-width:1024px){
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 190px; }
+  }
+  @media(max-width:768px){
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; gap:10px; }
+    .gallery-item.span-2 { grid-column:span 2; }
+    .gallery-caption { opacity:1; transform:none; left:12px; right:12px; bottom:10px; }
+    .gallery-caption .g-title { font-size:0.9rem; }
+    .gallery-item::after { opacity:1; background:linear-gradient(to top, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0) 60%); }
+  }
+
+  /* Lightbox */
+  #lightbox {
+    position:fixed; inset:0; z-index:2000;
+    background:rgba(10,10,10,0.94);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition:opacity .3s ease, visibility .3s ease;
+    backdrop-filter:blur(8px);
+  }
+  #lightbox.active { opacity:1; visibility:visible; }
+  #lightbox img {
+    max-width:90vw; max-height:82vh; object-fit:contain;
+    border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    transform:scale(0.96); transition:transform .3s ease;
+  }
+  #lightbox.active img { transform:scale(1); }
+  .lb-btn {
+    position:absolute; width:48px; height:48px; border-radius:50%;
+    background:rgba(255,255,255,0.1); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; cursor:pointer; transition:background .2s ease;
+    border:1px solid rgba(255,255,255,0.15);
+  }
+  .lb-btn:hover { background:rgba(255,255,255,0.2); }
+  .lb-close { top:24px; right:24px; }
+  .lb-prev { left:24px; top:50%; transform:translateY(-50%); }
+  .lb-next { right:24px; top:50%; transform:translateY(-50%); }
+  .lb-caption {
+    position:absolute; bottom:28px; left:0; right:0; text-align:center;
+    color:rgba(255,255,255,0.85); font-size:0.85rem;
+    font-family:'Playfair Display',serif;
+  }
+
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+
+  @media(prefers-reduced-motion:reduce) {
+    * { animation:none !important; transition:none !important; }
+    .reveal { opacity:1; transform:none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container-x">
+    <div class="flex justify-between items-center h-[72px]">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-line">
+          <img src="Logo-Kribi-ParadiseMODERNEo_page-0001 (1).jpg" alt="Kribi Paradise" class="w-full h-full object-contain">
+        </div>
+        <div class="leading-tight">
+          <div class="text-[15px] font-semibold tracking-tight">KRIBI PARADISE</div>
+          <div class="text-[10px] text-muted tracking-[0.15em] uppercase">Tourisme & Loisirs</div>
+        </div>
+      </a>
+      <div class="hidden md:flex items-center gap-3">
+        <a href="index.html" class="btn-ghost !py-2.5 !px-5 !text-[13px]"><i class="fas fa-arrow-left text-xs"></i> Retour au site</a>
+        <a href="index.html#reservation" class="btn-ink !py-2.5 !px-5 !text-[13px]">Réserver</a>
+      </div>
+      <a href="index.html" class="md:hidden text-ink text-xl"><i class="fas fa-times"></i></a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="gallery-hero">
+  <div class="container-x">
+    <span class="badge-label mb-6 inline-block">Galerie complète</span>
+    <h1>Kribi en images</h1>
+    <p>Plages, aventures, hébergements et nature — toute la collection Kribi Paradise réunie en un seul endroit.</p>
+  </div>
+</header>
+
+<!-- FILTRES -->
+<div class="filters-bar">
+  <div class="container-x">
+    <div class="flex gap-2 overflow-x-auto pb-1" id="filtersBar">
+      <button class="filter-pill active" data-filter="all">Tout</button>
+      <button class="filter-pill" data-filter="plages">Plages</button>
+      <button class="filter-pill" data-filter="aventures">Aventures</button>
+      <button class="filter-pill" data-filter="hebergements">Hébergements</button>
+      <button class="filter-pill" data-filter="nature">Nature</button>
+      <button class="filter-pill" data-filter="gastronomie">Gastronomie</button>
+    </div>
+  </div>
+</div>
+
+<!-- GALERIE -->
+<section class="py-16">
+  <div class="container-x">
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Remplace les src / data-full / data-cat / data-caption par tes propres images -->
+
+      <figure class="gallery-item span-2 tall reveal" data-cat="plages" data-full="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" data-caption="Plage de sable blanc — Kribi">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Plage de Kribi">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Plages de Kribi</div><div class="g-cat">Plages</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="aventures" data-full="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=1600&q=80" data-caption="Jet Ski — sensations fortes">
+        <img src="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=800&q=80" alt="Jet Ski">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Jet Ski</div><div class="g-cat">Aventures</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="hebergements" data-full="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1600&q=80" data-caption="Villa privée avec jardin tropical">
+        <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80" alt="Villa">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Villa 4 chambres</div><div class="g-cat">Hébergements</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item row-2 reveal" data-cat="nature" data-full="https://camhebergement.com/img/2023-04-22.jpg" data-caption="Chutes de la Lobé — les seules au monde à se jeter dans l'océan">
+        <img src="https://camhebergement.com/img/2023-04-22.jpg" alt="Chutes de la Lobé">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Chutes de la Lobé</div><div class="g-cat">Nature</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="aventures" data-full="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" data-caption="Quads — parcours en forêt tropicale">
+        <img src="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" alt="Quads">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Quads</div><div class="g-cat">Aventures</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="hebergements" data-full="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1600&q=80" data-caption="Chambre Prestige — élégance et confort">
+        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80" alt="Chambre Prestige">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Chambre Prestige</div><div class="g-cat">Hébergements</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item span-2 reveal" data-cat="plages" data-full="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1600&q=80" data-caption="Bateau de plaisance — criques isolées">
+        <img src="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1200&q=80" alt="Bateau">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Bateau de plaisance</div><div class="g-cat">Plages</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="nature" data-full="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" data-caption="Campement Pygmées — rencontre Baka">
+        <img src="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" alt="Pygmées">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Campement Pygmées</div><div class="g-cat">Nature</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="aventures" data-full="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" data-caption="Kayak — exploration des criques">
+        <img src="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" alt="Kayak">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Kayak</div><div class="g-cat">Aventures</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="hebergements" data-full="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1600&q=80" data-caption="Chambre Standard — confort optimal">
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80" alt="Chambre Standard">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Chambre Standard</div><div class="g-cat">Hébergements</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="gastronomie" data-full="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80" data-caption="Gastronomie locale — poisson braisé">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80" alt="Gastronomie">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Gastronomie</div><div class="g-cat">Gastronomie</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item span-2 tall reveal" data-cat="plages" data-full="IMG-20251212-WA0031.jpg" data-caption="Kribi Paradise — vue panoramique">
+        <img src="IMG-20251212-WA0031.jpg" alt="Kribi Paradise">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Kribi Paradise</div><div class="g-cat">Plages</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="nature" data-full="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=80" data-caption="Hammam & Jacuzzi — détente absolue">
+        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" alt="Hammam">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Hammam & Jacuzzi</div><div class="g-cat">Nature</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="plages" data-full="https://pictures.latribune.fr/cdn-cgi/image/format=auto,width=1200,height=675/691/1090691.png" data-caption="Port en eau profonde de Kribi">
+        <img src="https://pictures.latribune.fr/cdn-cgi/image/format=auto,width=1200,height=675/691/1090691.png" alt="Port">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Port en Eau Profonde</div><div class="g-cat">Plages</div></figcaption>
+      </figure>
+
+      <figure class="gallery-item reveal" data-cat="aventures" data-full="kribi paradise.jpg" data-caption="Balade à cheval — le long des plages">
+        <img src="kribi paradise.jpg" alt="Balade à cheval">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption"><div class="g-title">Balade à cheval</div><div class="g-cat">Aventures</div></figcaption>
+      </figure>
+    </div>
+
+    <div class="text-center py-20">
+      <p class="text-muted mb-6">Envie de vivre l'expérience Kribi Paradise ?</p>
+      <a href="index.html#reservation" class="btn-ink"><i class="fas fa-calendar-check"></i> Réserver mon séjour</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-ink text-white py-12 mt-10">
+  <div class="container-x">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="text-sm text-white/60">
+        <p class="font-semibold text-white mb-1">KRIBI PARADISE</p>
+        <p>ETS KRIBI PARADISE — NGOYE — SUD CAMEROUN — KRIBI</p>
+      </div>
+      <div class="text-xs text-white/40">
+        © 2024 Kribi Paradise. Tous droits réservés.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Fermer"><i class="fas fa-times"></i></button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Précédent"><i class="fas fa-chevron-left"></i></button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Suivant"><i class="fas fa-chevron-right"></i></button>
+  <img id="lbImg" src="" alt="">
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+const galleryItems = [...$$('.gallery-item')];
+let visibleItems = [...galleryItems];
+let currentIndex = 0;
+
+/* Filtres */
+$$('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    $$('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const filter = pill.dataset.filter;
+    galleryItems.forEach(item => {
+      item.style.display = (filter === 'all' || item.dataset.cat === filter) ? '' : 'none';
+    });
+    visibleItems = galleryItems.filter(item => item.style.display !== 'none');
+  });
+});
+
+/* Lightbox */
+const lightbox = $('#lightbox');
+const lbImg = $('#lbImg');
+const lbCaption = $('#lbCaption');
+
+function openLb(i) {
+  currentIndex = i;
+  const item = visibleItems[i];
+  lbImg.src = item.dataset.full || item.querySelector('img').src;
+  lbCaption.textContent = item.dataset.caption || '';
+  lightbox.classList.add('active');
+  lightbox.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() {
+  lightbox.classList.remove('active');
+  lightbox.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+function nextLb() {
+  currentIndex = (currentIndex + 1) % visibleItems.length;
+  openLb(currentIndex);
+}
+function prevLb() {
+  currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+  openLb(currentIndex);
+}
+
+galleryItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const idx = visibleItems.indexOf(item);
+    if (idx > -1) openLb(idx);
+  });
+});
+
+$('#lbClose').addEventListener('click', closeLb);
+$('#lbNext').addEventListener('click', nextLb);
+$('#lbPrev').addEventListener('click', prevLb);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowRight') nextLb();
+  if (e.key === 'ArrowLeft') prevLb();
+});
+
+/* Reveal */
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
+}, { threshold: 0.1 });
+$$('.reveal').forEach(el => revealIO.observe(el));
+</script>
+
+</body>
+</html>
