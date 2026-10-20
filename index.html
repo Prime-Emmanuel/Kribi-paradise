@@ -110,7 +110,7 @@ tailwind.config = {
   .field::placeholder { color:#A0A0A0; }
   select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B6B6B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; background-size:18px; }
 
-  /* Choice cards (packages & services) */
+  /* Choice cards */
   .choice {
     border:1px solid #E2E2E2; border-radius:16px; padding:16px 18px;
     cursor:pointer; transition:all .2s ease; display:flex; align-items:center; gap:14px;
@@ -174,13 +174,125 @@ tailwind.config = {
   }
   .scroll-top.visible { opacity:1; transform:translateY(0); }
 
-  /* Hero */
+  /* Hero — overlay allégé pour laisser voir l'image */
   .hero {
     min-height:100vh; display:flex; align-items:center; padding-top:80px;
-    background:
-      linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.94)),
-      url('IMG-20251212-WA0031.jpg');
+    position:relative;
+    background-image: url('IMG-20251212-WA0031.jpg');
     background-size:cover; background-position:center;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.30) 0%,
+      rgba(255,255,255,0.45) 45%,
+      rgba(255,255,255,0.80) 100%
+    );
+    z-index:0;
+  }
+  .hero > * { position:relative; z-index:1; }
+  .hero h1, .hero p { text-shadow:0 1px 2px rgba(255,255,255,0.5); }
+
+  /* ============ GALLERY ============ */
+  .gallery-grid {
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 200px;
+    gap: 14px;
+  }
+  .gallery-item {
+    position:relative; overflow:hidden; border-radius:18px; cursor:pointer;
+    background:#F2F2F0;
+    transition: transform .4s ease, box-shadow .4s ease;
+  }
+  .gallery-item img {
+    width:100%; height:100%; object-fit:cover;
+    transition: transform .7s cubic-bezier(.2,.8,.2,1), filter .4s ease;
+  }
+  .gallery-item:hover img { transform:scale(1.06); }
+  .gallery-item::after {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 55%);
+    opacity:0; transition:opacity .35s ease;
+  }
+  .gallery-item:hover::after { opacity:1; }
+  .gallery-caption {
+    position:absolute; left:18px; right:18px; bottom:16px; z-index:2;
+    color:#fff; opacity:0; transform:translateY(10px);
+    transition:all .35s ease;
+  }
+  .gallery-item:hover .gallery-caption { opacity:1; transform:translateY(0); }
+  .gallery-caption .g-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; }
+  .gallery-caption .g-cat { font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.75); margin-top:2px; }
+  .gallery-zoom {
+    position:absolute; top:14px; right:14px; z-index:2;
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.9); color:#0A0A0A;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; opacity:0; transform:scale(0.8);
+    transition:all .3s ease;
+  }
+  .gallery-item:hover .gallery-zoom { opacity:1; transform:scale(1); }
+
+  /* Layout asymétrique */
+  .gallery-item.span-2 { grid-column: span 2; }
+  .gallery-item.row-2 { grid-row: span 2; }
+  .gallery-item.tall { grid-row: span 2; }
+
+  @media(max-width:1024px){
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 180px; }
+  }
+  @media(max-width:768px){
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; gap:10px; }
+    .gallery-item.span-2 { grid-column: span 2; }
+    .gallery-caption { opacity:1; transform:none; left:12px; right:12px; bottom:10px; }
+    .gallery-caption .g-title { font-size:0.9rem; }
+    .gallery-item::after { opacity:1; background:linear-gradient(to top, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0) 60%); }
+  }
+
+  /* Filter pills */
+  .filter-pill {
+    padding:8px 18px; border-radius:999px; font-size:0.8rem; font-weight:500;
+    border:1px solid #E2E2E2; color:#6B6B6B; background:#fff;
+    transition:all .2s ease; cursor:pointer;
+  }
+  .filter-pill:hover { border-color:#0A0A0A; color:#0A0A0A; }
+  .filter-pill.active { background:#0A0A0A; color:#fff; border-color:#0A0A0A; }
+
+  /* Lightbox */
+  #lightbox {
+    position:fixed; inset:0; z-index:2000;
+    background:rgba(10,10,10,0.92);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition:opacity .3s ease, visibility .3s ease;
+    backdrop-filter:blur(8px);
+  }
+  #lightbox.active { opacity:1; visibility:visible; }
+  #lightbox img {
+    max-width:90vw; max-height:82vh; object-fit:contain;
+    border-radius:12px; box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    transform:scale(0.96); transition:transform .3s ease;
+  }
+  #lightbox.active img { transform:scale(1); }
+  .lb-btn {
+    position:absolute; width:48px; height:48px; border-radius:50%;
+    background:rgba(255,255,255,0.1); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; cursor:pointer; transition:background .2s ease;
+    border:1px solid rgba(255,255,255,0.15);
+  }
+  .lb-btn:hover { background:rgba(255,255,255,0.2); }
+  .lb-close { top:24px; right:24px; }
+  .lb-prev { left:24px; top:50%; transform:translateY(-50%); }
+  .lb-next { right:24px; top:50%; transform:translateY(-50%); }
+  .lb-caption {
+    position:absolute; bottom:28px; left:0; right:0; text-align:center;
+    color:rgba(255,255,255,0.85); font-size:0.85rem;
+    font-family:'Playfair Display',serif;
   }
 
   .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
@@ -190,8 +302,6 @@ tailwind.config = {
     * { animation:none !important; transition:none !important; }
     .reveal { opacity:1; transform:none; }
   }
-
-  .divider-dot { width:4px; height:4px; border-radius:50%; background:#D4D4D4; display:inline-block; }
 </style>
 </head>
 
@@ -227,6 +337,7 @@ tailwind.config = {
         <a href="#loisirs" class="nav-link">Loisirs</a>
         <a href="#tourisme" class="nav-link">Tourisme</a>
         <a href="#packages" class="nav-link">Packages</a>
+        <a href="#galerie" class="nav-link">Galerie</a>
         <a href="#reservation" class="btn-ink !py-2.5 !px-5 !text-[13px]">Réserver</a>
       </div>
 
@@ -247,6 +358,7 @@ tailwind.config = {
       <a href="#loisirs" class="block text-2xl font-display py-3 border-b border-line">Loisirs</a>
       <a href="#tourisme" class="block text-2xl font-display py-3 border-b border-line">Tourisme</a>
       <a href="#packages" class="block text-2xl font-display py-3 border-b border-line">Packages</a>
+      <a href="#galerie" class="block text-2xl font-display py-3 border-b border-line">Galerie</a>
       <a href="#reservation" class="btn-ink justify-center mt-6">Réserver maintenant</a>
     </div>
     <div class="mt-auto text-sm text-muted space-y-2 pt-8">
@@ -264,7 +376,7 @@ tailwind.config = {
       <h1 class="text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
         L'excellence du tourisme<br>à <span class="italic">Kribi</span>.
       </h1>
-      <p class="text-lg md:text-xl text-muted max-w-xl mb-10 leading-relaxed">
+      <p class="text-lg md:text-xl text-ink/80 max-w-xl mb-10 leading-relaxed">
         Hébergements d'exception, activités nautiques et packages tout compris.
         Une expérience pensée dans les moindres détails.
       </p>
@@ -273,11 +385,11 @@ tailwind.config = {
         <a href="#packages" class="btn-ghost"><i class="fas fa-gift"></i> Voir les packages</a>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-10 border-t border-line max-w-2xl">
-        <div><div class="text-3xl font-display mb-1">50+</div><div class="text-xs text-muted uppercase tracking-wider">Hébergements</div></div>
-        <div><div class="text-3xl font-display mb-1">10+</div><div class="text-xs text-muted uppercase tracking-wider">Activités</div></div>
-        <div><div class="text-3xl font-display mb-1">24/7</div><div class="text-xs text-muted uppercase tracking-wider">Assistance</div></div>
-        <div><div class="text-3xl font-display mb-1">100%</div><div class="text-xs text-muted uppercase tracking-wider">Satisfaction</div></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-10 border-t border-ink/10 max-w-2xl">
+        <div><div class="text-3xl font-display mb-1">50+</div><div class="text-xs text-ink/60 uppercase tracking-wider">Hébergements</div></div>
+        <div><div class="text-3xl font-display mb-1">10+</div><div class="text-xs text-ink/60 uppercase tracking-wider">Activités</div></div>
+        <div><div class="text-3xl font-display mb-1">24/7</div><div class="text-xs text-ink/60 uppercase tracking-wider">Assistance</div></div>
+        <div><div class="text-3xl font-display mb-1">100%</div><div class="text-xs text-ink/60 uppercase tracking-wider">Satisfaction</div></div>
       </div>
     </div>
   </div>
@@ -293,7 +405,6 @@ tailwind.config = {
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Standard -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80" alt="Chambre Standard">
@@ -309,7 +420,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Prestige -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80" alt="Chambre Prestige">
@@ -325,7 +435,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Villa 4 -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80" alt="Villa 4 chambres">
@@ -342,7 +451,6 @@ tailwind.config = {
       </article>
     </div>
 
-    <!-- Autres hébergements -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
       <div class="card p-6 text-center reveal">
         <i class="fas fa-star text-xl mb-3"></i>
@@ -382,7 +490,6 @@ tailwind.config = {
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Jet Ski -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=1200&q=80" alt="Jet Ski">
@@ -397,7 +504,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Quads -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" alt="Quads">
@@ -412,7 +518,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Bateau -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1200&q=80" alt="Bateau">
@@ -427,7 +532,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Cheval -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="kribi paradise.jpg" alt="Balade à cheval">
@@ -440,7 +544,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Kayak -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" alt="Kayak">
@@ -453,7 +556,6 @@ tailwind.config = {
         </div>
       </article>
 
-      <!-- Hammam -->
       <article class="card reveal">
         <div class="card-img relative">
           <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80" alt="Hammam">
@@ -539,8 +641,112 @@ tailwind.config = {
   </div>
 </section>
 
+<!-- ============ GALERIE ============ -->
+<section id="galerie" class="section">
+  <div class="container-x">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 reveal">
+      <div class="max-w-2xl">
+        <span class="badge-label mb-5 inline-block">Galerie</span>
+        <h2 class="text-4xl md:text-5xl mb-4">Kribi en images</h2>
+        <p class="text-muted text-lg leading-relaxed">Plages, aventures, instants volés — un aperçu de l'expérience Kribi Paradise.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="filter-pill active" data-filter="all">Tout</button>
+        <button class="filter-pill" data-filter="plages">Plages</button>
+        <button class="filter-pill" data-filter="aventures">Aventures</button>
+        <button class="filter-pill" data-filter="hebergements">Hébergements</button>
+        <button class="filter-pill" data-filter="nature">Nature</button>
+      </div>
+    </div>
+
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <!-- Les images ci-dessous sont des exemples : remplace les "src" par tes propres photos -->
+      <figure class="gallery-item span-2 tall" data-cat="plages" data-full="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" data-caption="Plage de sable blanc — Kribi">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Plage de Kribi">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Plages de Kribi</div>
+          <div class="g-cat">Plages</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="aventures" data-full="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=1600&q=80" data-caption="Jet Ski — sensations fortes">
+        <img src="https://images.unsplash.com/photo-1650939489556-a6fc47e28372?auto=format&fit=crop&w=800&q=80" alt="Jet Ski">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Jet Ski</div>
+          <div class="g-cat">Aventures</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="hebergements" data-full="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1600&q=80" data-caption="Villa privée avec jardin tropical">
+        <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80" alt="Villa">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Villa 4 chambres</div>
+          <div class="g-cat">Hébergements</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item row-2" data-cat="nature" data-full="https://camhebergement.com/img/2023-04-22.jpg" data-caption="Chutes de la Lobé — les seules au monde à se jeter dans l'océan">
+        <img src="https://camhebergement.com/img/2023-04-22.jpg" alt="Chutes de la Lobé">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Chutes de la Lobé</div>
+          <div class="g-cat">Nature</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="aventures" data-full="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" data-caption="Quads — parcours en forêt tropicale">
+        <img src="WhatsApp Image 2025-12-02 à 19.38.36_94eacdcc.jpg" alt="Quads">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Quads</div>
+          <div class="g-cat">Aventures</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="hebergements" data-full="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1600&q=80" data-caption="Chambre Prestige — élégance et confort">
+        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80" alt="Chambre Prestige">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Chambre Prestige</div>
+          <div class="g-cat">Hébergements</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item span-2" data-cat="plages" data-full="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1600&q=80" data-caption="Bateau de plaisance — criques isolées">
+        <img src="https://images.unsplash.com/photo-1585000962552-70f0a67223d9?auto=format&fit=crop&w=1200&q=80" alt="Bateau">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Bateau de plaisance</div>
+          <div class="g-cat">Plages</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="nature" data-full="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" data-caption="Campement Pygmées — rencontre Baka">
+        <img src="https://yengafrica.com/wp-content/uploads/2014/11/IMG_6639_11zon-870x555.jpg" alt="Pygmées">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Campement Pygmées</div>
+          <div class="g-cat">Nature</div>
+        </figcaption>
+      </figure>
+
+      <figure class="gallery-item" data-cat="aventures" data-full="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" data-caption="Kayak — exploration des criques">
+        <img src="WhatsApp Image 2025-12-02 à 19.38.35_af0908d9.jpg" alt="Kayak">
+        <span class="gallery-zoom"><i class="fas fa-expand"></i></span>
+        <figcaption class="gallery-caption">
+          <div class="g-title">Kayak</div>
+          <div class="g-cat">Aventures</div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- VÉHICULES -->
-<section class="section">
+<section class="section bg-mist">
   <div class="container-x">
     <div class="max-w-2xl mb-16 reveal">
       <span class="badge-label mb-5 inline-block">Transport</span>
@@ -568,7 +774,7 @@ tailwind.config = {
 </section>
 
 <!-- PACKAGES -->
-<section id="packages" class="section bg-mist">
+<section id="packages" class="section">
   <div class="container-x">
     <div class="max-w-2xl mb-16 reveal">
       <span class="badge-label mb-5 inline-block">Forfaits couple</span>
@@ -577,7 +783,6 @@ tailwind.config = {
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
-      <!-- Standard -->
       <div class="card p-8 reveal">
         <span class="text-xs uppercase tracking-widest text-muted">Économique</span>
         <h3 class="text-2xl mt-3 mb-1">Standard</h3>
@@ -593,7 +798,6 @@ tailwind.config = {
         <button class="add-service btn-ghost w-full justify-center" data-service="PACKAGE STANDARD" data-price="150000">Choisir ce package</button>
       </div>
 
-      <!-- Prestige -->
       <div class="card p-8 reveal border-2 !border-ink relative">
         <span class="badge-label absolute -top-3 left-8">Populaire</span>
         <span class="text-xs uppercase tracking-widest text-muted">Premium</span>
@@ -611,7 +815,6 @@ tailwind.config = {
         <button class="add-service btn-ink w-full justify-center" data-service="PACKAGE PRESTIGE" data-price="200000">Choisir ce package</button>
       </div>
 
-      <!-- VIP -->
       <div class="card p-8 reveal">
         <span class="text-xs uppercase tracking-widest text-muted">Luxe</span>
         <h3 class="text-2xl mt-3 mb-1">VIP</h3>
@@ -634,7 +837,7 @@ tailwind.config = {
 </section>
 
 <!-- RÉSERVATION -->
-<section id="reservation" class="section">
+<section id="reservation" class="section bg-mist">
   <div class="container-x">
     <div class="max-w-2xl mb-16 reveal">
       <span class="badge-label mb-5 inline-block">Réservation</span>
@@ -643,9 +846,7 @@ tailwind.config = {
     </div>
 
     <div class="grid lg:grid-cols-5 gap-8 items-start">
-      <!-- Colonne sélection -->
       <div class="lg:col-span-2 space-y-6">
-        <!-- Résumé -->
         <div class="card p-6 sticky top-24">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg">Votre sélection</h3>
@@ -666,44 +867,30 @@ tailwind.config = {
         </div>
       </div>
 
-      <!-- Colonne formulaire -->
       <div class="lg:col-span-3">
         <form id="reservationForm" class="card p-6 md:p-8 space-y-6" novalidate>
-          <!-- Packages (radio-like custom) -->
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Package tout compris</h4>
             <div class="space-y-2" id="packageChoices">
               <label class="choice" data-service="PACKAGE STANDARD" data-price="150000">
                 <span class="choice-mark"><i class="fas fa-check"></i></span>
-                <div class="flex-1">
-                  <div class="text-sm font-medium">Package Standard</div>
-                  <div class="choice-price">150 000 FCFA</div>
-                </div>
+                <div class="flex-1"><div class="text-sm font-medium">Package Standard</div><div class="choice-price">150 000 FCFA</div></div>
               </label>
               <label class="choice" data-service="PACKAGE PRESTIGE" data-price="200000">
                 <span class="choice-mark"><i class="fas fa-check"></i></span>
-                <div class="flex-1">
-                  <div class="text-sm font-medium">Package Prestige</div>
-                  <div class="choice-price">200 000 FCFA</div>
-                </div>
+                <div class="flex-1"><div class="text-sm font-medium">Package Prestige</div><div class="choice-price">200 000 FCFA</div></div>
               </label>
               <label class="choice" data-service="PACKAGE VIP" data-price="250000">
                 <span class="choice-mark"><i class="fas fa-check"></i></span>
-                <div class="flex-1">
-                  <div class="text-sm font-medium">Package VIP</div>
-                  <div class="choice-price">250 000 FCFA</div>
-                </div>
+                <div class="flex-1"><div class="text-sm font-medium">Package VIP</div><div class="choice-price">250 000 FCFA</div></div>
               </label>
               <label class="choice" data-service="" data-price="0" data-none="true">
                 <span class="choice-mark"><i class="fas fa-check"></i></span>
-                <div class="flex-1">
-                  <div class="text-sm font-medium">Aucun package — je choisis mes services</div>
-                </div>
+                <div class="flex-1"><div class="text-sm font-medium">Aucun package — je choisis mes services</div></div>
               </label>
             </div>
           </div>
 
-          <!-- Hébergement -->
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Hébergement</h4>
             <div class="space-y-2" id="hebergementChoices">
@@ -714,7 +901,6 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- Loisirs -->
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Loisirs</h4>
             <div class="space-y-2" id="loisirsChoices">
@@ -726,7 +912,6 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- Tourisme -->
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Tourisme</h4>
             <div class="space-y-2" id="tourismeChoices">
@@ -737,7 +922,6 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- Transport -->
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-3">Transport</h4>
             <div class="space-y-2" id="transportChoices">
@@ -746,7 +930,6 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- Informations -->
           <div class="pt-6 border-t border-line">
             <h4 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4">Informations personnelles</h4>
             <div class="grid md:grid-cols-2 gap-4">
@@ -825,84 +1008,63 @@ tailwind.config = {
   </div>
 </footer>
 
-<script>
-/* ============ ÉTAT CENTRALISÉ (source unique de vérité) ============ */
-const state = {
-  services: [],           // [{ service, price, isPackage }]
-  packageSelected: null,  // string | null
-};
+<!-- LIGHTBOX -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Fermer"><i class="fas fa-times"></i></button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Précédent"><i class="fas fa-chevron-left"></i></button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Suivant"><i class="fas fa-chevron-right"></i></button>
+  <img id="lbImg" src="" alt="">
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
 
+<script>
+/* ============ ÉTAT CENTRALISÉ ============ */
+const state = { services: [], packageSelected: null };
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 
-/* ---------- Loader ---------- */
-window.addEventListener('load', () => {
-  setTimeout(() => $('#loader').classList.add('hidden'), 400);
-});
+/* Loader */
+window.addEventListener('load', () => setTimeout(() => $('#loader').classList.add('hidden'), 400));
 
-/* ---------- Mobile menu ---------- */
-$('#menuToggle').addEventListener('click', () => {
-  $('#mobileMenu').classList.add('active');
-  document.body.style.overflow = 'hidden';
-});
-$('#closeMenu').addEventListener('click', () => {
-  $('#mobileMenu').classList.remove('active');
-  document.body.style.overflow = '';
-});
-$$('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
-  $('#mobileMenu').classList.remove('active');
-  document.body.style.overflow = '';
-}));
+/* Mobile menu */
+$('#menuToggle').addEventListener('click', () => { $('#mobileMenu').classList.add('active'); document.body.style.overflow='hidden'; });
+$('#closeMenu').addEventListener('click', () => { $('#mobileMenu').classList.remove('active'); document.body.style.overflow=''; });
+$$('#mobileMenu a').forEach(a => a.addEventListener('click', () => { $('#mobileMenu').classList.remove('active'); document.body.style.overflow=''; }));
 
-/* ---------- Scroll top ---------- */
+/* Scroll top */
 const scrollBtn = $('#scrollTop');
-window.addEventListener('scroll', () => {
-  scrollBtn.classList.toggle('visible', window.scrollY > 300);
-});
+window.addEventListener('scroll', () => scrollBtn.classList.toggle('visible', window.scrollY > 300));
 scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-/* ---------- Scrollspy (lien actif) ---------- */
-const sections = ['hebergement', 'loisirs', 'tourisme', 'packages', 'reservation'];
+/* Scrollspy */
+const sections = ['hebergement', 'loisirs', 'tourisme', 'packages', 'galerie', 'reservation'];
 const navLinks = [...$$('.nav-link')];
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
-    }
+    if (e.isIntersecting) navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
 
-/* ---------- Reveal on scroll ---------- */
+/* Reveal */
 const revealIO = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
 }, { threshold: 0.12 });
 $$('.reveal').forEach(el => revealIO.observe(el));
 
-/* =========================================================
-   LOGIQUE DE RÉSERVATION — refaite de zéro
-   - Un seul tableau `state.services`
-   - Les boutons "Ajouter" (cartes) et les "choice" (formulaire)
-     agissent sur le MÊME état via addService/removeService
-   - Le résumé et le total sont recalculés depuis l'état
-   - Aucune manipulation directe de checkboxes → plus de désync
-   ========================================================= */
-
-function isSameService(a, b) { return a.service === b.service; }
+/* ============ RÉSERVATION ============ */
+function isSame(a, b) { return a.service === b; }
 
 function addService(service, price, isPackage = false) {
   if (!service) return;
-  // Si on ajoute un package, on remplace toute la sélection
   if (isPackage) {
     state.services = [{ service, price, isPackage: true }];
     state.packageSelected = service;
   } else {
-    // Un service individuel annule le package
     state.packageSelected = null;
     state.services = state.services.filter(s => !s.isPackage);
-    // Toggle : si déjà présent, on retire
-    if (state.services.some(s => isSameService(s, { service }))) {
-      state.services = state.services.filter(s => !isSameService(s, { service }));
+    if (state.services.some(s => isSame(s, { service }))) {
+      state.services = state.services.filter(s => !isSame(s, { service }));
     } else {
       state.services.push({ service, price, isPackage: false });
     }
@@ -922,16 +1084,10 @@ function clearPackage() {
   render();
 }
 
-function total() {
-  return state.services.reduce((sum, s) => sum + Number(s.price || 0), 0);
-}
+function total() { return state.services.reduce((sum, s) => sum + Number(s.price || 0), 0); }
 
-/* ---------- Rendu ---------- */
 function render() {
-  // Compteur
   $('#serviceCount').textContent = state.services.length + (state.services.length > 1 ? ' services' : ' service');
-
-  // Résumé
   const summaryEmpty = $('#summaryEmpty');
   const summaryList = $('#summaryList');
 
@@ -956,17 +1112,13 @@ function render() {
     });
   }
 
-  // Total
   $('#totalPrice').textContent = total().toLocaleString('fr-FR') + ' FCFA';
 
-  // Synchroniser les "choice" du formulaire
   $$('.choice').forEach(choice => {
     const svc = choice.dataset.service;
     const isNone = choice.dataset.none === 'true';
-    let active = false;
+    let active;
     if (isNone) {
-      active = state.services.length === 0 || (!state.packageSelected && state.services.length > 0 && state.services.every(s => !s.isPackage));
-      // "Aucun package" actif si aucun package sélectionné
       active = !state.packageSelected;
     } else if (choice.closest('#packageChoices')) {
       active = state.packageSelected === svc;
@@ -977,61 +1129,39 @@ function render() {
   });
 }
 
-/* ---------- Boutons "Ajouter" des cartes ---------- */
 $$('.add-service').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
     const service = btn.dataset.service;
     const price = Number(btn.dataset.price);
     const isPackage = service.startsWith('PACKAGE');
-    // Feedback visuel
-    const already = state.services.some(s => s.service === service);
     addService(service, price, isPackage);
-    btn.textContent = (!already && state.services.some(s => s.service === service)) ? 'Retirer' : 'Ajouter';
-    // Scroll doux vers le résumé si on ajoute
-    if (!already && !isPackage) {
-      // Pas de scroll forcé pour ne pas gêner
-    }
   });
 });
 
-/* ---------- "choice" du formulaire (packages + services) ---------- */
 $$('.choice').forEach(choice => {
   choice.addEventListener('click', (e) => {
     e.preventDefault();
     const service = choice.dataset.service;
     const price = Number(choice.dataset.price || 0);
     const isNone = choice.dataset.none === 'true';
-
-    if (isNone) {
-      clearPackage();
-      return;
-    }
+    if (isNone) { clearPackage(); return; }
     const isPackage = choice.closest('#packageChoices') !== null;
     if (isPackage) {
-      if (state.packageSelected === service) {
-        // Désélectionner le package
-        clearPackage();
-      } else {
-        addService(service, price, true);
-      }
+      if (state.packageSelected === service) clearPackage();
+      else addService(service, price, true);
     } else {
-      // Service individuel : toggle
-      if (state.services.some(s => s.service === service && !s.isPackage)) {
-        removeService(service);
-      } else {
-        addService(service, price, false);
-      }
+      if (state.services.some(s => s.service === service && !s.isPackage)) removeService(service);
+      else addService(service, price, false);
     }
   });
 });
 
-/* ---------- Validation + envoi WhatsApp ---------- */
+/* Formulaire */
 const form = $('#reservationForm');
 const formError = $('#formError');
 const submitBtn = $('#submitBtn');
 
-// Dates : min = aujourd'hui, départ >= arrivée
 const today = new Date().toISOString().split('T')[0];
 const arrival = form.querySelector('[name="arrivee"]');
 const departure = form.querySelector('[name="depart"]');
@@ -1041,26 +1171,16 @@ arrival.addEventListener('change', () => { departure.min = arrival.value; });
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   formError.classList.add('hidden');
-
-  // Anti double-submit
   if (submitBtn.disabled) return;
 
-  // Validation
   const data = new FormData(form);
   const required = ['nom', 'email', 'telephone', 'arrivee', 'depart', 'personnes'];
   const missing = required.filter(k => !String(data.get(k) || '').trim());
 
-  if (state.services.length === 0) {
-    return showError('Veuillez sélectionner au moins un service ou un package.');
-  }
-  if (missing.length) {
-    return showError('Veuillez remplir tous les champs obligatoires.');
-  }
-  if (data.get('depart') < data.get('arrivee')) {
-    return showError('La date de départ doit être après la date d\'arrivée.');
-  }
+  if (state.services.length === 0) return showError('Veuillez sélectionner au moins un service ou un package.');
+  if (missing.length) return showError('Veuillez remplir tous les champs obligatoires.');
+  if (data.get('depart') < data.get('arrivee')) return showError('La date de départ doit être après la date d\'arrivée.');
 
-  // Construction du message
   const lines = [];
   lines.push('*NOUVELLE RÉSERVATION — KRIBI PARADISE*');
   lines.push('');
@@ -1072,26 +1192,18 @@ form.addEventListener('submit', (e) => {
   lines.push('Personnes : ' + data.get('personnes'));
   lines.push('');
   lines.push('*Services sélectionnés*');
-  state.services.forEach((s, i) => {
-    lines.push(`${i + 1}. ${s.service} — ${Number(s.price).toLocaleString('fr-FR')} FCFA`);
-  });
+  state.services.forEach((s, i) => lines.push(`${i + 1}. ${s.service} — ${Number(s.price).toLocaleString('fr-FR')} FCFA`));
   lines.push('');
   lines.push(`*TOTAL : ${total().toLocaleString('fr-FR')} FCFA*`);
-  if (data.get('message')) {
-    lines.push('');
-    lines.push('*Message*');
-    lines.push(data.get('message'));
-  }
+  if (data.get('message')) { lines.push(''); lines.push('*Message*'); lines.push(data.get('message')); }
   lines.push('');
   lines.push('_Généré via kribiparadise.com_');
 
   const url = 'https://wa.me/237694795189?text=' + encodeURIComponent(lines.join('\n'));
 
-  // Feedback
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ouverture de WhatsApp...';
   window.open(url, '_blank');
-
   setTimeout(() => {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Finaliser via WhatsApp';
@@ -1104,7 +1216,81 @@ function showError(msg) {
   formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-/* ---------- Init ---------- */
+/* ============ GALERIE ============ */
+const galleryItems = [...$$('.gallery-item')];
+let currentIndex = 0;
+let visibleItems = [...galleryItems];
+
+/* Filtres */
+$$('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    $$('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const filter = pill.dataset.filter;
+    galleryItems.forEach(item => {
+      const show = filter === 'all' || item.dataset.cat === filter;
+      item.style.display = show ? '' : 'none';
+    });
+    visibleItems = galleryItems.filter(item => item.style.display !== 'none');
+  });
+});
+
+/* Lightbox */
+const lightbox = $('#lightbox');
+const lbImg = $('#lbImg');
+const lbCaption = $('#lbCaption');
+
+function openLightbox(index) {
+  currentIndex = index;
+  const item = visibleItems[index];
+  if (!item) return;
+  lbImg.src = item.dataset.full || item.querySelector('img').src;
+  lbCaption.textContent = item.dataset.caption || '';
+  lightbox.classList.add('active');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+function showNext() {
+  currentIndex = (currentIndex + 1) % visibleItems.length;
+  const item = visibleItems[currentIndex];
+  lbImg.src = item.dataset.full || item.querySelector('img').src;
+  lbCaption.textContent = item.dataset.caption || '';
+}
+
+function showPrev() {
+  currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+  const item = visibleItems[currentIndex];
+  lbImg.src = item.dataset.full || item.querySelector('img').src;
+  lbCaption.textContent = item.dataset.caption || '';
+}
+
+galleryItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const idx = visibleItems.indexOf(item);
+    if (idx > -1) openLightbox(idx);
+  });
+});
+
+$('#lbClose').addEventListener('click', closeLightbox);
+$('#lbNext').addEventListener('click', showNext);
+$('#lbPrev').addEventListener('click', showPrev);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') showNext();
+  if (e.key === 'ArrowLeft') showPrev();
+});
+
+/* Init */
 render();
 </script>
 
